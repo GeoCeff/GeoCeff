@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/grimoire-banner.svg" alt="The adventurer's record of Geo Ceff" width="100%" />
+  <img src="./assets/grimoire-banner.svg" alt="Geo Ceff's weathered leather code grimoire" width="100%" />
 </p>
 
 <p align="center">
@@ -8,43 +8,54 @@
 </p>
 
 <p align="center">
-  <a href="#featured-quests">Featured quests</a> ·
-  <a href="#spellbook">Spellbook</a> ·
-  <a href="https://github.com/GeoCeff?tab=repositories">All repositories</a>
+  <a href="#page-i--the-scribe">The Scribe</a> ·
+  <a href="#page-ii--quest-ledger">Quest Ledger</a> ·
+  <a href="#page-iii--spellbook">Spellbook</a> ·
+  <a href="https://github.com/GeoCeff?tab=repositories">Archive</a>
 </p>
 
----
+<p align="center">
+  <img src="./assets/open-pages.svg" alt="An open, stained parchment spellbook inviting the reader to turn its pages" width="100%" />
+</p>
 
-### I. The Scribe's Record
+<details open>
+<summary id="page-i--the-scribe"><strong>📜 Turn to Page I — The Scribe</strong></summary>
+<br />
 
 I like software that gives people more control: private-by-default apps, tools that explain their own data, and games built around systems worth learning. My work moves between **TypeScript**, **Python**, **C++**, and **Godot**.
 
 > Every project is another spell learned—the useful kind, with tests and documentation.
 
-### II. The Quest Ledger
+</details>
 
-| Project | What it does | Craft |
+<details>
+<summary id="page-ii--quest-ledger"><strong>⚔️ Turn to Page II — The Quest Ledger</strong></summary>
+<br />
+
+| Quest | Record | Craft |
 | --- | --- | --- |
-| [**Perk the Star**](https://github.com/GeoCeff/perk-the-star) | An orbital tower-defense game with rotating defenses, campaigns, challenges, and a Tech XP tree. | C++ · Godot · GDScript |
-| [**Stock Tester & Simulator**](https://github.com/GeoCeff/stock-tester-and-simulator) | Market analytics, strategy backtesting, and manual-trading practice in one Streamlit workspace. | Python · Streamlit · Data |
-| [**Philippine Demographic Mapper**](https://github.com/GeoCeff/philippine-demographic-mapper) | A local-first choropleth builder for PSGC-coded Philippine demographic data. [Try it live →](https://geoceff.github.io/philippine-demographic-mapper/) | JavaScript · GeoJSON · CSV |
-| [**Email Automation**](https://github.com/GeoCeff/email-automation) | Consent-focused outreach, scheduling, reply collection, suppression, and human review. | Python · IMAP · Automation |
-| [**Projectile Motion**](https://github.com/GeoCeff/projectile-motion) | An interactive comparison of ideal projectile motion and quadratic air resistance. [Try it live →](https://geoceff.github.io/projectile-motion/) | JavaScript · Physics · Visualization |
-| [**ChatGPT Thread Optimizer**](https://github.com/GeoCeff/chatgpt-thread-optimizer) | A browser extension that keeps long conversations responsive by parking older turns. | JavaScript · Web Extensions · Performance |
+| [**Perk the Star**](https://github.com/GeoCeff/perk-the-star) | Orbital tower defense with rotating defenses, campaigns, challenges, and a Tech XP tree. | C++ · Godot · GDScript |
+| [**Stock Tester & Simulator**](https://github.com/GeoCeff/stock-tester-and-simulator) | Market analytics, strategy backtesting, and manual-trading practice in one workspace. | Python · Streamlit · Data |
+| [**Philippine Demographic Mapper**](https://github.com/GeoCeff/philippine-demographic-mapper) | Local-first choropleth maps for PSGC-coded demographic data. [Enter the map →](https://geoceff.github.io/philippine-demographic-mapper/) | JavaScript · GeoJSON · CSV |
+| [**Email Automation**](https://github.com/GeoCeff/email-automation) | Consent-focused outreach, scheduling, reply collection, suppression, and review. | Python · IMAP · Automation |
+| [**Projectile Motion**](https://github.com/GeoCeff/projectile-motion) | Ideal projectile motion and quadratic air resistance, compared interactively. [Run the simulation →](https://geoceff.github.io/projectile-motion/) | JavaScript · Physics · Visualization |
+| [**ChatGPT Thread Optimizer**](https://github.com/GeoCeff/chatgpt-thread-optimizer) | Keeps long browser conversations responsive by parking older turns. | JavaScript · Web Extensions |
 
-<details id="spellbook">
-<summary><strong>✦ Break the spellbook seal</strong></summary>
+</details>
+
+<details>
+<summary id="page-iii--spellbook"><strong>🔮 Turn to Page III — The Spellbook</strong></summary>
 <br />
 
 **Languages** — TypeScript, JavaScript, Python, C++, GDScript, SQL<br />
 **App craft** — React, React Native, Expo, Node.js, Streamlit<br />
 **World craft** — Godot, GDExtension, simulation, data visualization<br />
-**Principles** — local-first, accessible, privacy-conscious, boring where boring is better
+**Code oath** — local-first, accessible, privacy-conscious, boring where boring is better
 
 </details>
 
 <details>
-<summary><strong>⌁ Unroll the adventurer's log</strong></summary>
+<summary><strong>🪶 Turn to Page IV — The Adventurer's Log</strong></summary>
 <br />
 
 - **Studying:** Computer Science at the University of the Philippines Cebu
@@ -53,8 +64,6 @@ I like software that gives people more control: private-by-default apps, tools t
 
 </details>
 
----
-
 <p align="center">
-  <em>Here ends the present record. The next chapter is compiling.</em>
+  <em>Here ends the present record. The next page has yet to be written.</em>
 </p>

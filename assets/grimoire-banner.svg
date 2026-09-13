@@ -1,103 +1,81 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title description">
-  <title id="title">The adventurer's record of Geo Ceff</title>
-  <desc id="description">An animated old parchment scroll with a magic circle, ink flourishes, and a wax seal.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title description">
+  <title id="title">Geo Ceff's Code Grimoire</title>
+  <desc id="description">A weathered brown leather spellbook with brass corners, an embossed magic crest, scratches, and softly glowing runes.</desc>
   <defs>
-    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#ead7a5"/>
-      <stop offset=".26" stop-color="#f5e8c2"/>
-      <stop offset=".7" stop-color="#e9d39c"/>
-      <stop offset="1" stop-color="#cba96d"/>
+    <linearGradient id="desk" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#130f0d"/><stop offset=".5" stop-color="#2a1b14"/><stop offset="1" stop-color="#0e0c0b"/>
     </linearGradient>
-    <linearGradient id="roll" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#9c713f"/>
-      <stop offset=".18" stop-color="#e5ca91"/>
-      <stop offset=".48" stop-color="#f7e7ba"/>
-      <stop offset=".82" stop-color="#b88c52"/>
-      <stop offset="1" stop-color="#704622"/>
+    <linearGradient id="leather" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#6b351c"/><stop offset=".26" stop-color="#9a572c"/><stop offset=".68" stop-color="#6d351d"/><stop offset="1" stop-color="#3b1b14"/>
     </linearGradient>
-    <radialGradient id="seal" cx="38%" cy="32%">
-      <stop offset="0" stop-color="#b33e37"/>
-      <stop offset=".58" stop-color="#7d211f"/>
-      <stop offset="1" stop-color="#431415"/>
-    </radialGradient>
-    <radialGradient id="mana">
-      <stop offset="0" stop-color="#427d7d" stop-opacity=".22"/>
-      <stop offset="1" stop-color="#427d7d" stop-opacity="0"/>
-    </radialGradient>
-    <pattern id="fibers" width="17" height="13" patternUnits="userSpaceOnUse">
-      <path d="M0 3c5-2 9 2 17-1M2 11c4-2 8 1 14-1" fill="none" stroke="#6b4727" stroke-opacity=".055" stroke-width="1"/>
-      <circle cx="4" cy="6" r=".65" fill="#5f3e22" opacity=".09"/>
+    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#6c4a20"/><stop offset=".4" stop-color="#d0aa59"/><stop offset=".7" stop-color="#8d642c"/><stop offset="1" stop-color="#4d3118"/>
+    </linearGradient>
+    <pattern id="grain" width="31" height="23" patternUnits="userSpaceOnUse">
+      <path d="M0 7c8-5 16 5 31-2M5 19c7-4 13 3 23-2" fill="none" stroke="#e5ad66" stroke-opacity=".06"/>
+      <circle cx="7" cy="11" r="1" fill="#170b08" opacity=".16"/>
     </pattern>
-    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
-      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#1f1208" flood-opacity=".48"/>
+    <filter id="book-shadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity=".72"/>
     </filter>
-    <filter id="ink-glow" x="-70%" y="-70%" width="240%" height="240%">
-      <feGaussianBlur stdDeviation="2.2" result="blur"/>
-      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <style>
-      .ring { transform-origin: 230px 210px; animation: turn 30s linear infinite; }
-      .ring-back { transform-origin: 230px 210px; animation: turn-back 21s linear infinite; }
-      .glyph { animation: pulse 4.2s ease-in-out infinite; }
-      .spark { animation: glint 3.1s ease-in-out infinite alternate; }
-      .spark:nth-of-type(2n) { animation-delay: -1.2s; }
+      .sigil { transform-origin: 600px 246px; animation: breathe 4.8s ease-in-out infinite; }
+      .inner { transform-origin: 600px 246px; animation: turn 28s linear infinite; }
+      .dust { animation: drift 5s ease-in-out infinite alternate; }
+      .dust:nth-of-type(2n) { animation-delay: -2s; }
+      @keyframes breathe { 50% { opacity: .58; } }
       @keyframes turn { to { transform: rotate(360deg); } }
-      @keyframes turn-back { to { transform: rotate(-360deg); } }
-      @keyframes pulse { 50% { opacity: .34; } }
-      @keyframes glint { from { opacity: .18; } to { opacity: .85; } }
+      @keyframes drift { to { transform: translate(7px,-9px); opacity: .2; } }
       @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
     </style>
   </defs>
 
-  <rect width="1200" height="420" rx="26" fill="#21160d"/>
-  <g filter="url(#shadow)">
-    <path d="M71 53c22-30 61-37 92-22h875c31-15 69-8 91 22-19 25-19 289 0 314-22 30-60 37-91 22H163c-31 15-70 8-92-22 19-25 19-289 0-314Z" fill="url(#paper)"/>
-    <path d="M91 53c18-19 45-22 68-8-14 78-14 252 0 330-23 14-50 11-68-8 15-74 15-240 0-314Z" fill="url(#roll)"/>
-    <path d="M1109 53c-18-19-45-22-68-8 14 78 14 252 0 330 23 14 50 11 68-8-15-74-15-240 0-314Z" fill="url(#roll)"/>
-    <path d="M148 42h904M148 378h904" stroke="#76512c" stroke-width="3" opacity=".62"/>
-    <path d="M164 58h872v304H164z" fill="none" stroke="#68451f" stroke-width="1.5" stroke-dasharray="2 5" opacity=".55"/>
-    <path d="M159 45h882v330H159z" fill="url(#fibers)"/>
+  <rect width="1200" height="500" rx="26" fill="url(#desk)"/>
+  <g opacity=".2" stroke="#9f7044">
+    <path d="M0 82h1200M0 314h1200"/><path d="M172 0v500M964 0v500"/>
+  </g>
+  <g class="dust" fill="#e7c477" opacity=".48">
+    <circle cx="155" cy="104" r="2"/><circle cx="1032" cy="82" r="1.5"/><circle cx="1090" cy="384" r="2"/><circle cx="128" cy="407" r="1.4"/>
   </g>
 
-  <ellipse cx="230" cy="210" rx="185" ry="176" fill="url(#mana)"/>
-  <g fill="none" stroke="#315f60" opacity=".72" filter="url(#ink-glow)">
-    <circle cx="230" cy="210" r="111" stroke-width="2"/>
-    <circle cx="230" cy="210" r="84" stroke-width="1.5"/>
-    <g class="ring">
-      <path d="M230 99 326 266H134Z"/>
-      <circle cx="230" cy="99" r="4" fill="#315f60"/>
-      <circle cx="326" cy="266" r="4" fill="#315f60"/>
-      <circle cx="134" cy="266" r="4" fill="#315f60"/>
+  <g filter="url(#book-shadow)">
+    <path d="M267 62h675l46 37v326l-31 23H252l-39-35V98Z" fill="#d6bd84"/>
+    <path d="M234 48h690l38 35v326l-28 27H234l-28-27V78Z" fill="url(#leather)" stroke="#2b140e" stroke-width="9"/>
+    <path d="M234 48h42v388h-42l-28-27V78Z" fill="#452018" opacity=".88"/>
+    <path d="M278 72h620l37 30v282l-31 28H278Z" fill="none" stroke="url(#brass)" stroke-width="8"/>
+    <path d="M299 93h584l29 24v251l-25 22H299Z" fill="url(#grain)" stroke="#28130e" stroke-width="3"/>
+    <path d="M315 109h552l27 21v224l-23 19H315Z" fill="none" stroke="#d0aa59" stroke-opacity=".45" stroke-width="2" stroke-dasharray="3 8"/>
+
+    <g fill="url(#brass)" stroke="#35200f" stroke-width="2">
+      <path d="M232 50h92l-23 27-38 8-12 45-19 21Z"/><path d="M924 50h-92l23 27 38 8 12 45 19 21Z"/>
+      <path d="M232 434h92l-23-27-38-8-12-45-19-21Z"/><path d="M924 434h-92l23-27 38-8 12-45 19-21Z"/>
     </g>
-    <g class="ring-back">
-      <path d="m230 126 73 126H157Z" stroke="#6c4724"/>
-      <path d="M119 210h222M230 99v222" stroke-width="1"/>
+
+    <g class="sigil" fill="none" stroke="#d7bb72" filter="url(#glow)" opacity=".86">
+      <circle cx="600" cy="246" r="88" stroke-width="3"/>
+      <circle cx="600" cy="246" r="67" stroke-width="1.5"/>
+      <g class="inner">
+        <path d="m600 178 59 102H541Z"/><path d="m600 314-59-102h118Z"/>
+        <circle cx="600" cy="178" r="4" fill="#d7bb72"/><circle cx="659" cy="280" r="4" fill="#d7bb72"/><circle cx="541" cy="280" r="4" fill="#d7bb72"/>
+      </g>
+      <circle cx="600" cy="246" r="13" fill="#d7bb72"/>
     </g>
-    <path d="m230 157 46 80h-92Z" stroke="#3b2820" stroke-width="2"/>
-    <circle cx="230" cy="210" r="13" fill="#315f60" opacity=".75"/>
+
+    <g fill="#e0c680" text-anchor="middle" font-family="Georgia,serif">
+      <text x="600" y="130" font-size="18" letter-spacing="7">THE CODEX ARCANA</text>
+      <text x="600" y="374" font-size="42" font-weight="700" letter-spacing="5">GEO CEFF</text>
+      <text x="600" y="403" font-size="14" font-style="italic" letter-spacing="3">VOLUME I · SOFTWARE &amp; STRANGE WORLDS</text>
+    </g>
+
+    <g fill="none" stroke="#341710" stroke-linecap="round" opacity=".5">
+      <path d="m352 143 53 11m-35 39 74-8m-88 156 51-16m371-181 62 13m-44 179 72-21"/>
+      <path d="M471 83c18 7 31-4 45 6M695 390c15-8 30 4 44-5" stroke-width="2"/>
+    </g>
   </g>
 
-  <g class="glyph" fill="#62411f" font-family="Georgia,serif" font-size="18" text-anchor="middle">
-    <text x="230" y="78">✦</text><text x="230" y="350">⌁</text>
-    <text x="93" y="216">◇</text><text x="367" y="216">◇</text>
-  </g>
-  <g class="spark" fill="#315f60">
-    <circle cx="410" cy="94" r="2"/><circle cx="530" cy="322" r="1.6"/>
-    <circle cx="800" cy="78" r="1.8"/><circle cx="958" cy="302" r="1.5"/>
-  </g>
-
-  <g fill="#38271b">
-    <text x="430" y="119" font-family="Georgia,serif" font-size="17" letter-spacing="5">THE ADVENTURER'S RECORD OF</text>
-    <path d="M430 139h572" stroke="#72502e" stroke-width="1"/>
-    <text x="426" y="222" font-family="Georgia,serif" font-size="74" font-weight="700" letter-spacing="4">GEO CEFF</text>
-    <text x="432" y="262" font-family="Georgia,serif" font-size="20" font-style="italic" letter-spacing="2">Software craft · strange worlds · useful magic</text>
-    <path d="M432 286c90 22 166-20 250 0s162-18 249 0" fill="none" stroke="#72502e" stroke-width="1.6"/>
-  </g>
-
-  <g transform="translate(982 304)">
-    <circle r="43" fill="url(#seal)"/>
-    <circle r="34" fill="none" stroke="#d78669" stroke-opacity=".48" stroke-width="2"/>
-    <path d="M0-20 7-6l15 2-11 11 3 15L0 14l-14 8 3-15-11-11 15-2Z" fill="none" stroke="#e0a17f" stroke-width="2"/>
-    <text y="6" text-anchor="middle" fill="#e9b094" font-family="Georgia,serif" font-size="17" font-weight="700">GC</text>
-  </g>
+  <path d="M1010 130c48 65 67 142 99 224" fill="none" stroke="#eee0bd" stroke-width="14" stroke-linecap="round"/>
+  <path d="M1008 130c20 3 41 23 45 42-14-2-28 4-38 12 8 9 12 22 10 35" fill="none" stroke="#8a765a" stroke-width="2"/>
 </svg>
