@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/open-pages.svg" alt="An open, stained parchment spellbook inviting the reader to turn its pages" width="100%" />
+  <img src="./assets/open-pages.svg" alt="A square sheet of stained, weathered parchment inviting the reader to turn the archive pages" width="600" />
 </p>
 
 <details open>
