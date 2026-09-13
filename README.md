@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/grimoire-banner.svg" alt="Geo Ceff — Arcane Software Craft" width="100%" />
+  <img src="./assets/grimoire-banner.svg" alt="The adventurer's record of Geo Ceff" width="100%" />
 </p>
 
 <p align="center">
@@ -15,13 +15,13 @@
 
 ---
 
-### Current chapter
+### I. The Scribe's Record
 
 I like software that gives people more control: private-by-default apps, tools that explain their own data, and games built around systems worth learning. My work moves between **TypeScript**, **Python**, **C++**, and **Godot**.
 
 > Every project is another spell learned—the useful kind, with tests and documentation.
 
-### Featured quests
+### II. The Quest Ledger
 
 | Project | What it does | Craft |
 | --- | --- | --- |
@@ -33,7 +33,7 @@ I like software that gives people more control: private-by-default apps, tools t
 | [**ChatGPT Thread Optimizer**](https://github.com/GeoCeff/chatgpt-thread-optimizer) | A browser extension that keeps long conversations responsive by parking older turns. | JavaScript · Web Extensions · Performance |
 
 <details id="spellbook">
-<summary><strong>✦ Open the spellbook</strong></summary>
+<summary><strong>✦ Break the spellbook seal</strong></summary>
 <br />
 
 **Languages** — TypeScript, JavaScript, Python, C++, GDScript, SQL<br />
@@ -44,7 +44,7 @@ I like software that gives people more control: private-by-default apps, tools t
 </details>
 
 <details>
-<summary><strong>⌁ Read the adventurer's log</strong></summary>
+<summary><strong>⌁ Unroll the adventurer's log</strong></summary>
 <br />
 
 - **Studying:** Computer Science at the University of the Philippines Cebu
@@ -56,5 +56,5 @@ I like software that gives people more control: private-by-default apps, tools t
 ---
 
 <p align="center">
-  <em>The next chapter is compiling.</em>
+  <em>Here ends the present record. The next chapter is compiling.</em>
 </p>
