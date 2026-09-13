@@ -1,81 +1,118 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="500" viewBox="0 0 1200 500" role="img" aria-labelledby="title description">
-  <title id="title">Geo Ceff's Code Grimoire</title>
-  <desc id="description">A weathered brown leather spellbook with brass corners, an embossed magic crest, scratches, and softly glowing runes.</desc>
+  <title id="title">Geo Ceff's old leather code grimoire</title>
+  <desc id="description">A portrait-shaped antique leather book with an ornate gold border, resting on a dark wooden writing desk beside an inkwell and quill.</desc>
   <defs>
     <linearGradient id="desk" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#130f0d"/><stop offset=".5" stop-color="#2a1b14"/><stop offset="1" stop-color="#0e0c0b"/>
+      <stop stop-color="#17100d"/><stop offset=".34" stop-color="#50301f"/><stop offset=".7" stop-color="#352016"/><stop offset="1" stop-color="#120e0c"/>
+    </linearGradient>
+    <radialGradient id="lamplight" cx="45%" cy="42%" r="62%">
+      <stop stop-color="#c88949" stop-opacity=".22"/><stop offset=".58" stop-color="#754525" stop-opacity=".08"/><stop offset="1" stop-color="#090706" stop-opacity=".42"/>
+    </radialGradient>
+    <linearGradient id="pages" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#70502d"/><stop offset=".14" stop-color="#d2b783"/><stop offset=".74" stop-color="#e4d0a3"/><stop offset="1" stop-color="#79603a"/>
     </linearGradient>
     <linearGradient id="leather" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#6b351c"/><stop offset=".26" stop-color="#9a572c"/><stop offset=".68" stop-color="#6d351d"/><stop offset="1" stop-color="#3b1b14"/>
+      <stop stop-color="#3a1b12"/><stop offset=".17" stop-color="#7b4125"/><stop offset=".5" stop-color="#9a5d31"/><stop offset=".79" stop-color="#71391f"/><stop offset="1" stop-color="#2b130e"/>
     </linearGradient>
-    <linearGradient id="brass" x1="0" y1="0" x2="1" y2="1">
-      <stop stop-color="#6c4a20"/><stop offset=".4" stop-color="#d0aa59"/><stop offset=".7" stop-color="#8d642c"/><stop offset="1" stop-color="#4d3118"/>
+    <linearGradient id="inset" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#5b2c1c"/><stop offset=".5" stop-color="#814a29"/><stop offset="1" stop-color="#482117"/>
     </linearGradient>
-    <pattern id="grain" width="31" height="23" patternUnits="userSpaceOnUse">
-      <path d="M0 7c8-5 16 5 31-2M5 19c7-4 13 3 23-2" fill="none" stroke="#e5ad66" stroke-opacity=".06"/>
-      <circle cx="7" cy="11" r="1" fill="#170b08" opacity=".16"/>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#4b3118"/><stop offset=".26" stop-color="#b98d49"/><stop offset=".48" stop-color="#e0bd70"/><stop offset=".72" stop-color="#8e642e"/><stop offset="1" stop-color="#382312"/>
+    </linearGradient>
+    <linearGradient id="quill" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#88775c"/><stop offset=".4" stop-color="#f1e4c4"/><stop offset=".74" stop-color="#c8b591"/><stop offset="1" stop-color="#6f604a"/>
+    </linearGradient>
+    <pattern id="woodgrain" width="210" height="54" patternUnits="userSpaceOnUse">
+      <path d="M0 12c50-14 86 15 138-1s58 8 72 2M0 39c38 11 80-13 123 0s63-8 87-1" fill="none" stroke="#d19660" stroke-opacity=".09" stroke-width="2"/>
+      <path d="M26 27c23-9 42 8 62-2" fill="none" stroke="#120b08" stroke-opacity=".14"/>
     </pattern>
-    <filter id="book-shadow" x="-30%" y="-30%" width="160%" height="180%">
-      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000" flood-opacity=".72"/>
+    <pattern id="leathergrain" width="34" height="27" patternUnits="userSpaceOnUse">
+      <path d="M0 8c8-6 17 5 34-2M5 22c9-5 17 3 26-3" fill="none" stroke="#efb16d" stroke-opacity=".07"/>
+      <circle cx="9" cy="13" r="1" fill="#170a07" opacity=".19"/>
+    </pattern>
+    <filter id="shadow" x="-35%" y="-35%" width="180%" height="190%">
+      <feDropShadow dx="16" dy="20" stdDeviation="17" flood-color="#050302" flood-opacity=".78"/>
     </filter>
-    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
-      <feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    <filter id="soft-shadow" x="-50%" y="-50%" width="200%" height="220%">
+      <feDropShadow dx="5" dy="10" stdDeviation="8" flood-color="#000" flood-opacity=".72"/>
+    </filter>
+    <filter id="emboss" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.4" result="blur"/>
+      <feSpecularLighting in="blur" surfaceScale="3" specularConstant=".65" specularExponent="14" lighting-color="#efce8a" result="shine"><feDistantLight azimuth="225" elevation="42"/></feSpecularLighting>
+      <feComposite in="shine" in2="SourceAlpha" operator="in" result="lit"/>
+      <feMerge><feMergeNode in="lit"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
     <style>
-      .sigil { transform-origin: 600px 246px; animation: breathe 4.8s ease-in-out infinite; }
-      .inner { transform-origin: 600px 246px; animation: turn 28s linear infinite; }
-      .dust { animation: drift 5s ease-in-out infinite alternate; }
-      .dust:nth-of-type(2n) { animation-delay: -2s; }
-      @keyframes breathe { 50% { opacity: .58; } }
-      @keyframes turn { to { transform: rotate(360deg); } }
-      @keyframes drift { to { transform: translate(7px,-9px); opacity: .2; } }
+      .dust { animation: drift 7s ease-in-out infinite alternate; }
+      .glint { animation: glint 5s ease-in-out infinite; }
+      @keyframes drift { to { transform: translate(8px,-10px); opacity: .16; } }
+      @keyframes glint { 50% { opacity: .72; } }
       @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
     </style>
   </defs>
 
-  <rect width="1200" height="500" rx="26" fill="url(#desk)"/>
-  <g opacity=".2" stroke="#9f7044">
-    <path d="M0 82h1200M0 314h1200"/><path d="M172 0v500M964 0v500"/>
-  </g>
-  <g class="dust" fill="#e7c477" opacity=".48">
-    <circle cx="155" cy="104" r="2"/><circle cx="1032" cy="82" r="1.5"/><circle cx="1090" cy="384" r="2"/><circle cx="128" cy="407" r="1.4"/>
-  </g>
+  <rect width="1200" height="500" rx="24" fill="url(#desk)"/>
+  <rect width="1200" height="500" rx="24" fill="url(#woodgrain)"/>
+  <rect width="1200" height="500" rx="24" fill="url(#lamplight)"/>
+  <g opacity=".34" stroke="#1a0f0b" stroke-width="3"><path d="M0 132h1200M0 366h1200"/><path d="M181 0v500M1008 0v500"/></g>
 
-  <g filter="url(#book-shadow)">
-    <path d="M267 62h675l46 37v326l-31 23H252l-39-35V98Z" fill="#d6bd84"/>
-    <path d="M234 48h690l38 35v326l-28 27H234l-28-27V78Z" fill="url(#leather)" stroke="#2b140e" stroke-width="9"/>
-    <path d="M234 48h42v388h-42l-28-27V78Z" fill="#452018" opacity=".88"/>
-    <path d="M278 72h620l37 30v282l-31 28H278Z" fill="none" stroke="url(#brass)" stroke-width="8"/>
-    <path d="M299 93h584l29 24v251l-25 22H299Z" fill="url(#grain)" stroke="#28130e" stroke-width="3"/>
-    <path d="M315 109h552l27 21v224l-23 19H315Z" fill="none" stroke="#d0aa59" stroke-opacity=".45" stroke-width="2" stroke-dasharray="3 8"/>
-
-    <g fill="url(#brass)" stroke="#35200f" stroke-width="2">
-      <path d="M232 50h92l-23 27-38 8-12 45-19 21Z"/><path d="M924 50h-92l23 27 38 8 12 45 19 21Z"/>
-      <path d="M232 434h92l-23-27-38-8-12-45-19-21Z"/><path d="M924 434h-92l23-27 38-8 12-45 19-21Z"/>
-    </g>
-
-    <g class="sigil" fill="none" stroke="#d7bb72" filter="url(#glow)" opacity=".86">
-      <circle cx="600" cy="246" r="88" stroke-width="3"/>
-      <circle cx="600" cy="246" r="67" stroke-width="1.5"/>
-      <g class="inner">
-        <path d="m600 178 59 102H541Z"/><path d="m600 314-59-102h118Z"/>
-        <circle cx="600" cy="178" r="4" fill="#d7bb72"/><circle cx="659" cy="280" r="4" fill="#d7bb72"/><circle cx="541" cy="280" r="4" fill="#d7bb72"/>
-      </g>
-      <circle cx="600" cy="246" r="13" fill="#d7bb72"/>
-    </g>
-
-    <g fill="#e0c680" text-anchor="middle" font-family="Georgia,serif">
-      <text x="600" y="130" font-size="18" letter-spacing="7">THE CODEX ARCANA</text>
-      <text x="600" y="374" font-size="42" font-weight="700" letter-spacing="5">GEO CEFF</text>
-      <text x="600" y="403" font-size="14" font-style="italic" letter-spacing="3">VOLUME I · SOFTWARE &amp; STRANGE WORLDS</text>
-    </g>
-
-    <g fill="none" stroke="#341710" stroke-linecap="round" opacity=".5">
-      <path d="m352 143 53 11m-35 39 74-8m-88 156 51-16m371-181 62 13m-44 179 72-21"/>
-      <path d="M471 83c18 7 31-4 45 6M695 390c15-8 30 4 44-5" stroke-width="2"/>
-    </g>
+  <g class="dust" fill="#e8c27b" opacity=".4">
+    <circle cx="121" cy="96" r="1.8"/><circle cx="184" cy="392" r="1.2"/><circle cx="986" cy="67" r="1.5"/><circle cx="1097" cy="408" r="1.9"/>
   </g>
 
-  <path d="M1010 130c48 65 67 142 99 224" fill="none" stroke="#eee0bd" stroke-width="14" stroke-linecap="round"/>
-  <path d="M1008 130c20 3 41 23 45 42-14-2-28 4-38 12 8 9 12 22 10 35" fill="none" stroke="#8a765a" stroke-width="2"/>
+  <g transform="rotate(-3 500 250)" filter="url(#shadow)">
+    <path d="M331 54 678 43l24 375-352 31-35-22Z" fill="url(#pages)" stroke="#312016" stroke-width="5"/>
+    <path d="M350 423c101-4 234-15 350-29v24c-102 14-223 25-350 31Z" fill="#cbb07d"/>
+    <g stroke="#7c633e" stroke-opacity=".55">
+      <path d="M360 429c104-6 216-15 332-29M359 435c105-6 216-15 334-29M360 441c102-6 213-15 333-29"/>
+    </g>
+
+    <path d="M305 49 661 38l25 356-350 29-32-25Z" fill="url(#leather)" stroke="#24100c" stroke-width="9"/>
+    <path d="M305 49 353 58l22 350-39 15-32-25Z" fill="#432016" opacity=".9"/>
+    <path d="M318 54 662 43l20 348-337 25-22-23Z" fill="url(#leathergrain)"/>
+
+    <path d="M352 75 632 66l19 295-278 21Z" fill="none" stroke="url(#gold)" stroke-width="10"/>
+    <path d="M369 91 617 83l16 261-245 19Z" fill="none" stroke="#32170f" stroke-width="5"/>
+    <path d="M385 107 601 100l14 226-212 17Z" fill="url(#inset)" stroke="url(#gold)" stroke-width="4"/>
+    <path d="M398 121 588 115l11 196-183 15Z" fill="url(#leathergrain)" stroke="#2b150f" stroke-width="2"/>
+
+    <g fill="none" stroke="url(#gold)" stroke-width="3" filter="url(#emboss)">
+      <path d="M359 78q22 2 31 21-18 8-19 29m258-59q-21 4-28 23 18 7 20 27M376 380q19-4 27-23-18-7-20-27m265 32q-21-2-30-21 18-8 19-29"/>
+      <path d="M371 130c-13 15-12 32 4 46-16 14-13 31 4 43-15 15-12 31 4 44-14 14-11 30 5 42"/>
+      <path d="M624 119c15 13 15 29 2 44 16 12 16 29 2 43 16 13 16 29 2 44 16 12 15 29 1 43"/>
+      <path d="M421 104c18 12 36 11 53-3 18 13 38 12 55-3 18 13 37 11 54-3M437 337c18-14 37-15 55-3 17-15 36-16 54-4 17-14 35-16 51-5"/>
+    </g>
+    <g fill="url(#gold)" stroke="#3a2412" stroke-width="1.5">
+      <circle cx="367" cy="85" r="6"/><circle cx="626" cy="77" r="6"/><circle cx="386" cy="371" r="6"/><circle cx="642" cy="352" r="6"/>
+      <circle cx="376" cy="148" r="3"/><circle cx="381" cy="244" r="3"/><circle cx="387" cy="320" r="3"/>
+      <circle cx="623" cy="138" r="3"/><circle cx="628" cy="226" r="3"/><circle cx="633" cy="302" r="3"/>
+    </g>
+
+    <g fill="#2e160f" opacity=".45" stroke-linecap="round">
+      <path d="m425 146 49-9m-54 36 68-5m-56 126 45-12m60-137 38 8m-56 119 62-17" stroke="#2e160f" stroke-width="2"/>
+      <path d="M443 206c22-11 39 9 59-1s32 8 51 0M448 247c19 8 38-10 55 0s35-7 52 1" fill="none" stroke="#dca66a" stroke-opacity=".16"/>
+    </g>
+
+    <g class="glint" text-anchor="middle" font-family="Georgia,serif" fill="#b18a50" filter="url(#emboss)" opacity=".52">
+      <text x="501" y="187" font-size="13" letter-spacing="5">THE ARCHIVE OF</text>
+      <text x="507" y="260" font-size="34" font-weight="700" letter-spacing="4">GEO CEFF</text>
+      <path d="M443 277h130" stroke="#a77c43"/>
+      <text x="509" y="303" font-size="12" font-style="italic" letter-spacing="2">VOLUME I</text>
+    </g>
+  </g>
+
+  <g transform="translate(822 82)" filter="url(#soft-shadow)">
+    <ellipse cx="50" cy="35" rx="48" ry="18" fill="#0d0908" opacity=".7"/>
+    <path d="M16 31h68l-8 57H24Z" fill="#1a1717" stroke="#6f5037" stroke-width="3"/>
+    <ellipse cx="50" cy="31" rx="34" ry="12" fill="#080707" stroke="#8c6743" stroke-width="3"/>
+    <ellipse cx="50" cy="32" rx="22" ry="6" fill="#15101c"/>
+    <path d="M25 74h50l9 15H16Z" fill="#100d0c" stroke="#6f5037" stroke-width="2"/>
+  </g>
+
+  <g filter="url(#soft-shadow)">
+    <path d="M861 382c54-95 108-184 184-276" fill="none" stroke="#6a5135" stroke-width="7" stroke-linecap="round"/>
+    <path d="M1045 106c-52 6-93 49-110 95 22-9 40-5 53 7-26 8-47 25-60 51 18-8 34-5 45 5-30 19-64 64-112 118 73-54 110-83 133-116 10-14 15-31 14-51 21-27 34-64 37-109Z" fill="url(#quill)" stroke="#5a4936" stroke-width="2"/>
+    <path d="M861 382c65-87 119-175 184-276" fill="none" stroke="#8a7350" stroke-width="2"/>
+  </g>
 </svg>
