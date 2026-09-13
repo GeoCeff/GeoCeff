@@ -36,9 +36,9 @@ I like software that gives people more control: private-by-default apps, tools t
 <summary><strong>✦ Open the spellbook</strong></summary>
 <br />
 
-**Languages** — TypeScript, JavaScript, Python, C++, GDScript, SQL  
-**App craft** — React, React Native, Expo, Node.js, Streamlit  
-**World craft** — Godot, GDExtension, simulation, data visualization  
+**Languages** — TypeScript, JavaScript, Python, C++, GDScript, SQL<br />
+**App craft** — React, React Native, Expo, Node.js, Streamlit<br />
+**World craft** — Godot, GDExtension, simulation, data visualization<br />
 **Principles** — local-first, accessible, privacy-conscious, boring where boring is better
 
 </details>
