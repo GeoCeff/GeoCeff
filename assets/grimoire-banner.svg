@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="340" viewBox="0 0 1200 340" role="img" aria-labelledby="title description">
+  <title id="title">Geo Ceff — Arcane Software Craft</title>
+  <desc id="description">An animated fantasy grimoire banner with a glowing magic circle and constellations.</desc>
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080d1b"/>
+      <stop offset="0.52" stop-color="#111a32"/>
+      <stop offset="1" stop-color="#071a1b"/>
+    </linearGradient>
+    <radialGradient id="aura">
+      <stop offset="0" stop-color="#77dfc3" stop-opacity=".22"/>
+      <stop offset=".48" stop-color="#5b79c7" stop-opacity=".10"/>
+      <stop offset="1" stop-color="#080d1b" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="grain" width="5" height="5" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r=".55" fill="#f3dfae" opacity=".08"/>
+    </pattern>
+    <style>
+      .orbit { transform-origin: 194px 170px; animation: spin 26s linear infinite; }
+      .orbit-reverse { transform-origin: 194px 170px; animation: spin-reverse 19s linear infinite; }
+      .star { animation: flicker 3.6s ease-in-out infinite alternate; }
+      .star:nth-of-type(2n) { animation-delay: -1.4s; }
+      .rune { animation: breathe 4s ease-in-out infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes spin-reverse { to { transform: rotate(-360deg); } }
+      @keyframes flicker { from { opacity: .25; } to { opacity: .95; } }
+      @keyframes breathe { 50% { opacity: .46; } }
+      @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+    </style>
+  </defs>
+
+  <rect width="1200" height="340" rx="24" fill="url(#night)"/>
+  <rect width="1200" height="340" rx="24" fill="url(#grain)"/>
+  <ellipse cx="194" cy="170" rx="270" ry="245" fill="url(#aura)"/>
+  <path d="M24 24h1152v292H24z" fill="none" stroke="#cbb778" stroke-opacity=".34"/>
+  <path d="M36 36h1128M36 304h1128" stroke="#77dfc3" stroke-opacity=".12"/>
+
+  <g fill="#e9d79e" class="star">
+    <circle cx="420" cy="64" r="1.8"/><circle cx="514" cy="105" r="1.2"/>
+    <circle cx="665" cy="48" r="1.5"/><circle cx="772" cy="91" r="1.1"/>
+    <circle cx="928" cy="58" r="1.7"/><circle cx="1086" cy="102" r="1.2"/>
+    <circle cx="462" cy="272" r="1.3"/><circle cx="734" cy="292" r="1.6"/>
+    <circle cx="1012" cy="252" r="1.1"/><circle cx="1140" cy="218" r="1.5"/>
+  </g>
+
+  <g transform="translate(194 170)" fill="none" stroke="#77dfc3" filter="url(#glow)">
+    <circle r="108" stroke-width="1.2" opacity=".65"/>
+    <circle r="91" stroke="#cbb778" stroke-width="1" opacity=".52"/>
+    <g class="orbit">
+      <path d="M0-108L93.5 54H-93.5Z" opacity=".56"/>
+      <circle cy="-108" r="4" fill="#77dfc3"/>
+      <circle cx="93.5" cy="54" r="4" fill="#77dfc3"/>
+      <circle cx="-93.5" cy="54" r="4" fill="#77dfc3"/>
+    </g>
+    <g class="orbit-reverse" stroke="#cbb778" opacity=".46">
+      <path d="M0 91L78.8-45.5H-78.8Z"/>
+      <path d="M-91 0H91M0-91V91"/>
+    </g>
+    <circle r="47" stroke-width="1.3" opacity=".65"/>
+    <path d="M0-34L32 24H-32Z" stroke="#e9d79e" opacity=".82"/>
+    <circle r="7" fill="#e9d79e" stroke="none" opacity=".9"/>
+  </g>
+
+  <g class="rune" fill="#cbb778" opacity=".74" font-family="Georgia, serif" font-size="16" text-anchor="middle">
+    <text x="194" y="40">✦</text><text x="194" y="312">⌁</text>
+    <text x="62" y="176">◇</text><text x="326" y="176">◇</text>
+  </g>
+
+  <g transform="translate(392 0)">
+    <text x="0" y="135" fill="#77dfc3" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="15" letter-spacing="6">ADVENTURER · BUILDER · STUDENT</text>
+    <text x="0" y="205" fill="#f2e7c7" font-family="Georgia, 'Times New Roman', serif" font-size="72" letter-spacing="5">GEO CEFF</text>
+    <path d="M2 225h650" stroke="#cbb778" stroke-opacity=".62"/>
+    <text x="2" y="259" fill="#aebbd8" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="18" letter-spacing="4">ARCANE SOFTWARE CRAFT</text>
+  </g>
+</svg>
