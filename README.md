@@ -1,5 +1,3 @@
-# Geo Ceff
-
 <p align="center">
   <img src="./assets/cloudscape-hd-bronze.webp" alt="Geo Ceff — an animated painted cloudscape in a rounded bronze frame" width="100%" />
 </p>
