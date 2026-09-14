@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/cloudscape-hd-bronze.webp" alt="Geo Ceff — an animated painted cloudscape in a rounded bronze frame" width="100%" />
+  <img src="./assets/cloudscape-fullhd-bronze.webp" alt="Geo Ceff — an animated painted cloudscape in a refined rounded bronze frame" width="100%" />
 </p>
 
 <p align="center">
