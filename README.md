@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/grimoire-banner.svg" alt="Geo Ceff's weathered leather code grimoire" width="100%" />
+  <img src="./assets/grimoire-cover.webp" alt="A photorealistic antique leather grimoire on a wooden desk" width="100%" />
 </p>
 
 <p align="center">
@@ -15,8 +15,10 @@
 </p>
 
 <p align="center">
-  <img src="./assets/open-pages.svg" alt="A square sheet of stained, weathered parchment inviting the reader to turn the archive pages" width="600" />
+  <img src="./assets/parchment-page.webp" alt="A photorealistic square sheet of stained and weathered parchment" width="600" />
 </p>
+
+<p align="center"><em>Turn the pages below. Each seal reveals another record.</em></p>
 
 <details open>
 <summary id="page-i--the-scribe"><strong>📜 Turn to Page I — The Scribe</strong></summary>
