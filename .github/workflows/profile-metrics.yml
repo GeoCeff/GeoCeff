@@ -1,0 +1,30 @@
+name: Update profile metrics
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 0 * * 1"
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Render public GitHub metrics
+        run: node scripts/render-metrics.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit updated metrics
+        run: |
+          if git diff --quiet -- assets/github-metrics.svg; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/github-metrics.svg
+          git commit -m "Update profile metrics [skip ci]"
+          git push
