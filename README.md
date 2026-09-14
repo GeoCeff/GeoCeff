@@ -1,7 +1,7 @@
 # Geo Ceff
 
 <p align="center">
-  <img src="./assets/cloudscape-animated.webp" alt="A gently moving painted cloudscape above green fields" width="100%" />
+  <img src="./assets/cloudscape-wind.webp" alt="Geo Ceff — a painted cloudscape moving gently in the wind" width="100%" />
 </p>
 
 Computer Science student at the University of the Philippines Cebu. I build practical software, data tools, and games.
