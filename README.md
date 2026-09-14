@@ -1,5 +1,9 @@
 # Geo Ceff
 
+<p align="center">
+  <img src="./assets/profile-header.svg" alt="Geo Ceff — software, data, and games" width="100%" />
+</p>
+
 Computer Science student at the University of the Philippines Cebu. I build practical software, data tools, and games.
 
 I'm interested in mobile engineering, data visualization, simulation, automation, and game systems. I learn by building complete projects and working through the parts that make them usable: clear interfaces, validation, documentation, and sensible defaults.

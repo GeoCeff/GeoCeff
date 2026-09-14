@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="240" viewBox="0 0 900 240" role="img" aria-labelledby="title desc">
+  <title id="title">Geo Ceff — software, data, and games</title>
+  <desc id="desc">A monochrome animated technical diagram connecting software, data, and games.</desc>
+  <defs>
+    <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle class="dot" cx="1" cy="1" r="1" />
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="white" stop-opacity="0" />
+      <stop offset="0.35" stop-color="white" />
+      <stop offset="1" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    <mask id="dotFade"><rect width="900" height="240" fill="url(#fade)" /></mask>
+  </defs>
+
+  <style>
+    .bg { fill: #ffffff; }
+    .ink { fill: #0a0a0a; }
+    .muted { fill: #737373; }
+    .line { fill: none; stroke: #0a0a0a; }
+    .soft-line { fill: none; stroke: #d4d4d4; }
+    .dot { fill: #a3a3a3; }
+    .label { font: 11px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 2px; }
+    .name { font: 700 52px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: -3px; }
+    .small { font: 10px ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: 1px; }
+    .flow { stroke-dasharray: 3 9; animation: flow 7s linear infinite; }
+    .pulse { animation: pulse 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    .pulse.two { animation-delay: .8s; }
+    .pulse.three { animation-delay: 1.6s; }
+    .cursor { animation: blink 1.1s steps(2, end) infinite; }
+    @keyframes flow { to { stroke-dashoffset: -96; } }
+    @keyframes pulse { 0%, 100% { opacity: .25; transform: scale(.72); } 50% { opacity: 1; transform: scale(1); } }
+    @keyframes blink { 50% { opacity: 0; } }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0c0c0f; }
+      .ink { fill: #f4f4f5; }
+      .muted { fill: #a0a0a8; }
+      .line { stroke: #f4f4f5; }
+      .soft-line { stroke: #3a3a42; }
+      .dot { fill: #8a8a92; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flow, .pulse, .cursor { animation: none; }
+      .pulse { opacity: .8; }
+    }
+  </style>
+
+  <rect class="bg" width="900" height="240" rx="16" />
+  <rect class="soft-line" x="0.5" y="0.5" width="899" height="239" rx="15.5" />
+  <rect x="390" width="510" height="240" fill="url(#dots)" mask="url(#dotFade)" opacity=".35" />
+
+  <text class="muted label" x="48" y="50">PROFILE / 2026</text>
+  <text class="ink name" x="45" y="119">GEO CEFF</text>
+  <text class="muted label" x="48" y="151">SOFTWARE · DATA · GAMES</text>
+  <text class="muted small" x="48" y="200">CEBU, PHILIPPINES</text>
+  <rect class="ink cursor" x="187" y="190" width="7" height="11" />
+
+  <path class="soft-line" d="M490 120H565M625 120H686M746 120H821" />
+  <path class="line flow" d="M490 120H821" />
+  <circle class="bg soft-line" cx="595" cy="120" r="30" />
+  <circle class="bg soft-line" cx="716" cy="120" r="30" />
+  <circle class="ink pulse" cx="490" cy="120" r="5" />
+  <circle class="ink pulse two" cx="595" cy="120" r="5" />
+  <circle class="ink pulse three" cx="716" cy="120" r="5" />
+  <circle class="ink pulse" cx="821" cy="120" r="5" />
+  <text class="muted small" x="575" y="166">BUILD</text>
+  <text class="muted small" x="699" y="166">TEST</text>
+  <text class="muted small" x="803" y="166">SHIP</text>
+</svg>
