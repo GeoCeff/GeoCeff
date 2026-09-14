@@ -1,8 +1,4 @@
 <p align="center">
-  <img src="./assets/cloudscape-fullhd-bronze.webp" alt="Geo Ceff — an animated painted cloudscape in a refined rounded bronze frame" width="100%" />
-</p>
-
-<p align="center">
   <strong>Computer Science student at the University of the Philippines Cebu</strong><br />
   I build practical software, data tools, and games—and I learn by finishing the unglamorous parts that make them usable.
 </p>
