@@ -1,12 +1,13 @@
 <p align="center">
-  <strong>Computer Science student at the University of the Philippines Cebu</strong><br />
-  I build practical software, data tools, and games—and I learn by finishing the unglamorous parts that make them usable.
+  <strong>Computer Science student at UP Cebu · DOST-SEI Undergraduate Scholar</strong><br />
+  I build data tools, web applications, browser extensions, automation, and game systems—usually with Python, JavaScript/TypeScript, or C++.
 </p>
 
 <p align="center">
   <a href="mailto:ghgabaisen@up.edu.ph">Email</a> ·
   <a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/">LinkedIn</a> ·
   <a href="https://leetcode.com/u/Vinzr/">LeetCode</a> ·
+  <a href="https://www.datacamp.com/portfolio/ghgabaisen">DataCamp</a> ·
   <a href="https://github.com/GeoCeff?tab=repositories">All repositories</a>
 </p>
 
@@ -27,38 +28,41 @@
 <table>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/GeoCeff/perk-the-star"><strong>Perk the Star</strong></a><br />
-      <sub>C++ · GODOT · GDSCRIPT</sub><br /><br />
-      Orbital tower defense with rotating satellites, multiple game modes, persistent upgrades, and reusable systems implemented through GDExtension.
+      <a href="https://github.com/GeoCeff/stock-tester-and-simulator"><strong>Quantitative Trading Platform</strong></a><br />
+      <sub>PYTHON · STREAMLIT · PANDAS · PLOTLY</sub><br /><br />
+      Market research and backtesting workspace with technical indicators, interactive dashboards, risk metrics, paper trading, and guarded broker execution.
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/GeoCeff/stock-tester-and-simulator"><strong>Stock Research and Execution Workstation</strong></a><br />
-      <sub>PYTHON · STREAMLIT · MARKET DATA</sub><br /><br />
-      Market research, backtesting, paper trading, portfolio risk, and guarded IBKR execution in one workspace. Invalid or stale research cannot approve an order.
+      <a href="https://github.com/GeoCeff/perk-the-star"><strong>Perk the Star</strong></a><br />
+      <sub>C++ · GDEXTENSION · GDSCRIPT · GODOT</sub><br /><br />
+      Godot 4.6 orbital tower defense with rotating build slots, upgrade systems, JSON-driven waves, reusable HUD and audio helpers, and a packaged Windows build.
     </td>
   </tr>
   <tr>
     <td width="50%" valign="top">
-      <a href="https://github.com/GeoCeff/philippine-demographic-mapper"><strong>Philippine Demographic Mapper</strong></a><br />
-      <sub>JAVASCRIPT · GEOJSON · CSV</sub><br /><br />
-      Local-first PSGC data validation and choropleth mapping with PNG and SVG export. <a href="https://geoceff.github.io/philippine-demographic-mapper/">Open the live app →</a>
+      <a href="https://github.com/GeoCeff/chatgpt-thread-optimizer"><strong>ChatGPT Thread Optimizer</strong></a><br />
+      <sub>JAVASCRIPT · MANIFEST V3 · DOM APIS</sub><br /><br />
+      Browser extension that parks older conversation turns and uses native browser rendering controls to reduce lag in long ChatGPT threads.
     </td>
     <td width="50%" valign="top">
-      <a href="https://github.com/GeoCeff/projectile-motion"><strong>Projectile Motion Lab</strong></a><br />
-      <sub>JAVASCRIPT · PHYSICS · VISUALIZATION</sub><br /><br />
-      Interactive comparison of ideal motion and quadratic drag with live charts, presets, animation, and exports. <a href="https://geoceff.github.io/projectile-motion/">Run the simulation →</a>
+      <a href="https://github.com/GeoCeff/python-automation-toolkit"><strong>Python Automation Toolkit</strong></a><br />
+      <sub>PYTHON · ARGPARSE · UNITTEST · GITHUB ACTIONS</sub><br /><br />
+      Command-line tools for organizing files, generating CSV sales reports, and creating timestamped backups, with tests and continuous integration.
     </td>
   </tr>
 </table>
 
 <p align="center"><img src="./assets/bronze-divider.svg" alt="" width="100%" /></p>
 
-## 03 — Tools and approach
+## 03 — Stack and approach
 
-<p align="center">
-  <code>TypeScript</code> · <code>JavaScript</code> · <code>Python</code> · <code>C++</code> · <code>GDScript</code> · <code>SQL</code><br /><br />
-  <code>React</code> · <code>React Native</code> · <code>Expo</code> · <code>Node.js</code> · <code>Streamlit</code> · <code>Godot</code>
-</p>
+**Languages** — <code>Python</code> · <code>C</code> · <code>C++</code> · <code>JavaScript</code> · <code>TypeScript</code>
+
+**Web** — <code>React</code> · <code>Next.js</code> · <code>HTML/CSS</code> · <code>Chrome Extensions</code>
+
+**Data** — <code>Streamlit</code> · <code>Pandas</code> · <code>NumPy</code> · <code>Plotly</code> · <code>yfinance</code>
+
+**Games and workflow** — <code>Godot</code> · <code>GDScript</code> · <code>GDExtension</code> · <code>Git/GitHub</code> · <code>GitHub Actions</code> · <code>Microsoft Excel</code>
 
 I prefer small, understandable systems with clear defaults. I keep sensitive data local when possible, put irreversible actions behind explicit confirmation, and document a prototype's limits instead of pretending it is finished.
 
