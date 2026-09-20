@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="28" viewBox="0 0 900 28" role="img" aria-label="Bronze section divider">
-  <defs><linearGradient id="bronze"><stop stop-color="#68401d"/><stop offset=".5" stop-color="#e0bd7a"/><stop offset="1" stop-color="#68401d"/></linearGradient></defs>
-  <path d="M24 14H424M476 14H876" stroke="url(#bronze)" stroke-width="1.5" opacity=".72"/>
-  <path d="M450 5L459 14L450 23L441 14Z" fill="none" stroke="#b98645" stroke-width="1.5"/>
-  <circle cx="450" cy="14" r="2.5" fill="#e0bd7a"/>
-</svg>
