@@ -1,4 +1,4 @@
-<p align="center"><img src="./assets/portfolio-header.svg" alt="Geo Gabaisen — student builder, data interfaces, and game systems, over the blue forest from his portfolio" width="100%" /></p>
+<p align="center"><img src="./assets/portfolio-header.svg" alt="Geo Gabaisen — student builder, data interfaces, and game systems, beside his blue ASCII portrait over the portfolio forest" width="100%" /></p>
 
 I build local-first tools, data interfaces, and game systems that turn technical ideas into usable software. I'm a Computer Science student at UP Cebu and a DOST-SEI undergraduate scholar.
 
