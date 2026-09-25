@@ -1,0 +1,35 @@
+name: GitHub metrics
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          filename: assets/github-metrics.svg
+          user: GeoCeff
+          token: ${{ secrets.METRICS_TOKEN }}
+          committer_token: ${{ secrets.GITHUB_TOKEN }}
+          template: classic
+          base: header, activity, community, repositories, metadata
+          config_display: large
+          config_timezone: Asia/Manila
+          config_order: base.header, base.activity+community, habits, isocalendar, languages, topics, repositories
+          plugin_habits: yes
+          plugin_habits_facts: no
+          plugin_habits_charts: yes
+          plugin_isocalendar: yes
+          plugin_languages: yes
+          plugin_languages_details: percentage
+          plugin_languages_limit: 8
+          plugin_topics: yes
+          plugin_topics_mode: icons
+          plugin_topics_limit: 0
+          plugin_repositories: yes
+          plugin_repositories_pinned: 4
