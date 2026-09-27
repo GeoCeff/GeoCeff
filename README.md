@@ -2,7 +2,7 @@
 
 I build local-first tools, data interfaces, and game systems that turn technical ideas into usable software. I'm a Computer Science student at UP Cebu and a DOST-SEI undergraduate scholar.
 
-<p align="center"><a href="mailto:ghgabaisen@up.edu.ph">Email</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/">LinkedIn</a> &nbsp;·&nbsp; <a href="https://leetcode.com/u/Vinzr/">LeetCode</a> &nbsp;·&nbsp; <a href="https://www.datacamp.com/portfolio/ghgabaisen">DataCamp</a></p>
+<p align="center"><a href="https://geoceff.github.io/portfolio-website-public/">Portfolio</a> &nbsp;·&nbsp; <a href="mailto:ghgabaisen@up.edu.ph">Email</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/">LinkedIn</a> &nbsp;·&nbsp; <a href="https://leetcode.com/u/Vinzr/">LeetCode</a> &nbsp;·&nbsp; <a href="https://www.datacamp.com/portfolio/ghgabaisen">DataCamp</a></p>
 
 ## 01 / Selected work
 
