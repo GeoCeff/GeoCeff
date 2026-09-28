@@ -4,7 +4,13 @@ I build local-first tools, data interfaces, and game systems that turn technical
 
 <p align="center"><a href="https://geoceff.github.io/portfolio-website-public/">Portfolio</a> &nbsp;·&nbsp; <a href="mailto:ghgabaisen@up.edu.ph">Email</a> &nbsp;·&nbsp; <a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/">LinkedIn</a> &nbsp;·&nbsp; <a href="https://leetcode.com/u/Vinzr/">LeetCode</a> &nbsp;·&nbsp; <a href="https://www.datacamp.com/portfolio/ghgabaisen">DataCamp</a></p>
 
-## 01 / Selected work
+## 01 / GitHub metrics
+
+<img src="./assets/section-divider.svg" alt="" width="100%" />
+
+<picture><img src="./assets/github-metrics.svg" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories" width="100%" /></picture>
+
+## 02 / Selected work
 
 <img src="./assets/section-divider.svg" alt="" width="100%" />
 
@@ -13,7 +19,7 @@ I build local-first tools, data interfaces, and game systems that turn technical
 | **[Quantitative Trading Platform](https://github.com/GeoCeff/stock-tester-and-simulator)**<br><sub>PYTHON · STREAMLIT · MARKET RESEARCH</sub><br><br>Research and paper-trading workspace with backtesting and risk metrics. | **[Perk the Star](https://github.com/GeoCeff/perk-the-star)**<br><sub>GODOT · C++ · GDEXTENSION</sub><br><br>Tower-defense game with custom systems, upgrades, and JSON-driven waves. |
 | **[ChatGPT Thread Optimizer](https://github.com/GeoCeff/chatgpt-thread-optimizer)**<br><sub>JAVASCRIPT · BROWSER EXTENSION</sub><br><br>Reduces rendering pressure in long conversations. | **[Python Automation Toolkit](https://github.com/GeoCeff/python-automation-toolkit)**<br><sub>PYTHON · CLI · CI</sub><br><br>File organization, CSV reports, and backups, with tests and CI. |
 
-## 02 / Stack
+## 03 / Stack
 
 <img src="./assets/section-divider.svg" alt="" width="100%" />
 
