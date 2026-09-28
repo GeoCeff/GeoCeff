@@ -23,6 +23,17 @@ jobs:
           config_display: large
           config_timezone: Asia/Manila
           config_order: base.header, base.activity+community, isocalendar, languages, leetcode, repositories
+          extras_css: |
+            :root {
+              --color-calendar-graph-day-L1-bg: #173d72 !important;
+              --color-calendar-graph-day-L2-bg: #256bc4 !important;
+              --color-calendar-graph-day-L3-bg: #4a92ff !important;
+              --color-calendar-graph-day-L4-bg: #9dccff !important;
+            }
+            [fill="#9be9a8"] { fill: #173d72 !important; }
+            [fill="#40c463"] { fill: #256bc4 !important; }
+            [fill="#30a14e"] { fill: #4a92ff !important; }
+            [fill="#216e39"] { fill: #9dccff !important; }
           plugin_isocalendar: yes
           plugin_languages: yes
           plugin_languages_details: percentage
