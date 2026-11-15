@@ -1,0 +1,16 @@
+{
+  "name": "geoceff-profile",
+  "private": true,
+  "description": "Generator for the GeoCeff GitHub profile README. Every image in assets/ is drawn by scripts/.",
+  "scripts": {
+    "fetch": "node scripts/fetch-stats.cjs",
+    "build": "node scripts/build.cjs",
+    "preview": "node scripts/preview.cjs"
+  },
+  "devDependencies": {
+    "@fontsource/jetbrains-mono": "^5.3.0",
+    "@fontsource/montserrat": "^5.3.0",
+    "opentype.js": "^1.3.4",
+    "simple-icons": "^16.38.0"
+  }
+}

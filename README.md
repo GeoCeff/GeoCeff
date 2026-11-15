@@ -1,59 +1,37 @@
-<p align="center"><img src="./assets/portfolio-header.svg" alt="Geo Ceff Vinzr H. Gabaisen — Computer Science student and builder, beside his blue ASCII portrait over the portfolio forest" width="100%" /></p>
+<!--
+  GeoCeff / profile README. Every image is drawn by scripts/ (npm run build).
+  Copy lives in scripts/content.cjs; live numbers in data/stats.json (npm run fetch).
+  Edit those, not this file or assets/: the daily workflow regenerates both.
+-->
 
-<table width="100%">
-  <tr>
-    <td width="68%">
-      <sub>PROFILE / CURRENT FOCUS</sub><br><br>
-      I build local-first tools, data interfaces, and game systems that turn technical ideas into usable software. I'm a Computer Science student at UP Cebu and a DOST-SEI undergraduate scholar.
-    </td>
-    <td width="32%">
-      <sub>STATUS / LOCATION</sub><br><br>
-      <code>CEBU, PH</code> <code>UP CEBU</code><br><br>
-      <code>DOST-SEI SCHOLAR</code> <code>BUILDING</code>
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2" align="center">
-      <a href="https://geoceff.github.io/portfolio-website-public/"><strong>PORTFOLIO</strong></a>
-      &nbsp;·&nbsp; <a href="mailto:ghgabaisen@up.edu.ph">EMAIL</a>
-      &nbsp;·&nbsp; <a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/">LINKEDIN</a>
-      &nbsp;·&nbsp; <a href="https://leetcode.com/u/Vinzr/">LEETCODE</a>
-      &nbsp;·&nbsp; <a href="https://www.datacamp.com/portfolio/ghgabaisen">DATACAMP</a>
-    </td>
-  </tr>
-</table>
+<a href="https://geoceff.github.io/portfolio-website-public/#home"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/banner-narrow-still.svg?v=0a846c01"><source media="(max-width: 600px)" srcset="assets/banner-narrow.svg?v=856dee9e"><source media="(prefers-reduced-motion: reduce)" srcset="assets/banner-still.svg?v=cd4ce7cf"><img src="assets/banner.svg?v=ec00b656" alt="Geo Ceff Vinzr H. Gabaisen: COMPUTER SCIENCE / BUILDER / DATA + GAME SYSTEMS. UP Cebu, DOST-SEI scholar. Open the portfolio at geoceff.github.io/portfolio-website-public." width="100%"></picture></a>
 
-## 01 / GitHub metrics
+<p><a href="https://geoceff.github.io/portfolio-website-public/#about"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/intro-narrow-still-dark.svg?v=4a5445b0"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/intro-narrow-still-light.svg?v=a6ae7a40"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/intro-narrow-dark.svg?v=c0cf8541"><source media="(max-width: 600px)" srcset="assets/intro-narrow-light.svg?v=4ce80aa9"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/intro-still-dark.svg?v=63958a8e"><source media="(prefers-reduced-motion: reduce)" srcset="assets/intro-still-light.svg?v=a67ad5b7"><source media="(prefers-color-scheme: dark)" srcset="assets/intro-dark.svg?v=a2efedc5"><img src="assets/intro-light.svg?v=05646952" alt="I build local-first tools, data interfaces, and game systems that turn technical ideas into usable software. I'm a Computer Science student at UP Cebu and a DOST-SEI undergraduate scholar. Status: CEBU, PH, UP CEBU, DOST-SEI SCHOLAR, BUILDING." width="100%"></picture></a></p>
 
-<sub>ACTIVITY · CONTRIBUTIONS · LANGUAGES · LEETCODE · FEATURED REPOSITORIES</sub>
+<h3><a href="https://github.com/GeoCeff?tab=overview"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/metrics-narrow-still-dark.svg?v=1f46dee2"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/headers/metrics-narrow-still-light.svg?v=fe09c708"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/headers/metrics-narrow-dark.svg?v=275e7803"><source media="(max-width: 600px)" srcset="assets/headers/metrics-narrow-light.svg?v=f9310c41"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/metrics-still-dark.svg?v=f5f17380"><source media="(prefers-reduced-motion: reduce)" srcset="assets/headers/metrics-still-light.svg?v=d6aa9cab"><source media="(prefers-color-scheme: dark)" srcset="assets/headers/metrics-dark.svg?v=5522e289"><img src="assets/headers/metrics-light.svg?v=77484336" alt="01 / GITHUB METRICS: Activity, on record. Activity · contributions · languages · LeetCode · featured repos" width="100%"></picture></a></h3>
 
-<img src="./assets/section-divider.svg" alt="" width="100%" />
+<a href="https://github.com/GeoCeff"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/metrics-banner-still.svg?v=8ca227d1"><img src="assets/metrics-banner.svg?v=b028b211" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories" width="100%"></picture></a>
 
-<picture><img src="./assets/github-metrics.svg" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories" width="100%" /></picture>
+<h3><a href="https://github.com/GeoCeff?tab=repositories"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/work-narrow-still-dark.svg?v=a07795ce"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/headers/work-narrow-still-light.svg?v=cd409860"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/headers/work-narrow-dark.svg?v=78dbb77a"><source media="(max-width: 600px)" srcset="assets/headers/work-narrow-light.svg?v=dc892a16"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/work-still-dark.svg?v=299f526f"><source media="(prefers-reduced-motion: reduce)" srcset="assets/headers/work-still-light.svg?v=574899af"><source media="(prefers-color-scheme: dark)" srcset="assets/headers/work-dark.svg?v=ee8b077f"><img src="assets/headers/work-light.svg?v=413fb716" alt="02 / SELECTED WORK: Selected work. Public projects · data systems · game development · automation" width="100%"></picture></a></h3>
 
-## 02 / Selected work
+<p align="center">
+<a href="https://github.com/GeoCeff/stock-tester-and-simulator"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/projects/stock-tester-and-simulator-still.svg?v=499cc528"><img src="assets/projects/stock-tester-and-simulator.svg?v=aeef194f" alt="Quantitative Trading Platform: Research and paper-trading workspace for comparing tickers, testing strategies, and reviewing risk metrics. Built with python, streamlit, backtesting." width="392"></picture></a>
+<a href="https://github.com/GeoCeff/perk-the-star"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/projects/perk-the-star-still.svg?v=e7eda674"><img src="assets/projects/perk-the-star.svg?v=d7c81ed7" alt="Perk the Star: Godot tower-defense game with custom C++ systems, upgrades, and JSON-driven enemy waves. Built with godot, c++, gdextension." width="392"></picture></a><br>
+<a href="https://github.com/GeoCeff/chatgpt-thread-optimizer"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/projects/chatgpt-thread-optimizer-still.svg?v=f535182b"><img src="assets/projects/chatgpt-thread-optimizer.svg?v=b474356b" alt="ChatGPT Thread Optimizer: Browser extension that reduces rendering pressure in long ChatGPT conversations by parking older turns. Built with javascript, extension, performance." width="392"></picture></a>
+<a href="https://github.com/GeoCeff/python-automation-toolkit"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/projects/python-automation-toolkit-still.svg?v=5e9e24cc"><img src="assets/projects/python-automation-toolkit.svg?v=3b161e97" alt="Python Automation Toolkit: Practical command-line utilities for organizing files, generating CSV reports, and creating backups. Built with python, cli, ci." width="392"></picture></a>
+</p>
 
-<sub>PUBLIC PROJECTS · DATA SYSTEMS · GAME DEVELOPMENT · AUTOMATION</sub>
+<h3><a href="https://geoceff.github.io/portfolio-website-public/#skills"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/stack-narrow-still-dark.svg?v=78ffbb98"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/headers/stack-narrow-still-light.svg?v=fa5895bd"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/headers/stack-narrow-dark.svg?v=4a6f26e8"><source media="(max-width: 600px)" srcset="assets/headers/stack-narrow-light.svg?v=980205ee"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/stack-still-dark.svg?v=df8ba11f"><source media="(prefers-reduced-motion: reduce)" srcset="assets/headers/stack-still-light.svg?v=756684d5"><source media="(prefers-color-scheme: dark)" srcset="assets/headers/stack-dark.svg?v=d6d53788"><img src="assets/headers/stack-light.svg?v=3a9a9af1" alt="03 / STACK: Tools I reach for. Languages · frameworks · UI · tools · platforms" width="100%"></picture></a></h3>
 
-<img src="./assets/section-divider.svg" alt="" width="100%" />
+<a href="https://geoceff.github.io/portfolio-website-public/#skills"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/stack-banner-narrow-still.svg?v=debbeeb5"><source media="(max-width: 600px)" srcset="assets/stack-banner-narrow.svg?v=20ce7d05"><source media="(prefers-reduced-motion: reduce)" srcset="assets/stack-banner-still.svg?v=1309afca"><img src="assets/stack-banner.svg?v=bbc11b84" alt="Languages, Markup and Styling: C, C++, JavaScript, TypeScript, HTML, CSS, Python, GDScript. Frameworks and UI: React, Next.js, Streamlit, Chrome Extensions, GDExtension. Tools and Platforms: Git / GitHub, GitHub Actions, Pandas / NumPy, Plotly, Godot, Docker" width="100%"></picture></a>
 
-| Data and systems | Games and tools |
-| :-- | :-- |
-| <sub>01 / MARKET RESEARCH</sub><br><br>**[Quantitative Trading Platform](https://github.com/GeoCeff/stock-tester-and-simulator)**<br><br>Research and paper-trading workspace for comparing tickers, testing strategies, and reviewing risk metrics.<br><br><code>PYTHON</code> <code>STREAMLIT</code> <code>BACKTESTING</code><br><br><sub>[VIEW REPOSITORY →](https://github.com/GeoCeff/stock-tester-and-simulator)</sub> | <sub>02 / GAME SYSTEMS</sub><br><br>**[Perk the Star](https://github.com/GeoCeff/perk-the-star)**<br><br>Godot tower-defense game with custom C++ systems, upgrades, and JSON-driven enemy waves.<br><br><code>GODOT</code> <code>C++</code> <code>GDEXTENSION</code><br><br><sub>[VIEW REPOSITORY →](https://github.com/GeoCeff/perk-the-star)</sub> |
-| <sub>03 / BROWSER TOOLING</sub><br><br>**[ChatGPT Thread Optimizer](https://github.com/GeoCeff/chatgpt-thread-optimizer)**<br><br>Browser extension that reduces rendering pressure in long ChatGPT conversations by parking older turns.<br><br><code>JAVASCRIPT</code> <code>EXTENSION</code> <code>PERFORMANCE</code><br><br><sub>[VIEW REPOSITORY →](https://github.com/GeoCeff/chatgpt-thread-optimizer)</sub> | <sub>04 / AUTOMATION</sub><br><br>**[Python Automation Toolkit](https://github.com/GeoCeff/python-automation-toolkit)**<br><br>Practical command-line utilities for organizing files, generating CSV reports, and creating backups.<br><br><code>PYTHON</code> <code>CLI</code> <code>CI</code><br><br><sub>[VIEW REPOSITORY →](https://github.com/GeoCeff/python-automation-toolkit)</sub> |
+<h3><a href="mailto:ghgabaisen@up.edu.ph"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/contact-narrow-still-dark.svg?v=b16d1c8e"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/headers/contact-narrow-still-light.svg?v=c18f7fbf"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/headers/contact-narrow-dark.svg?v=2e80a524"><source media="(max-width: 600px)" srcset="assets/headers/contact-narrow-light.svg?v=776e051b"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/headers/contact-still-dark.svg?v=0c96fe2a"><source media="(prefers-reduced-motion: reduce)" srcset="assets/headers/contact-still-light.svg?v=a585aec3"><source media="(prefers-color-scheme: dark)" srcset="assets/headers/contact-dark.svg?v=ab4451fb"><img src="assets/headers/contact-light.svg?v=82701565" alt="04 / CONTACT: Open a channel. Portfolio · email · LinkedIn · LeetCode · DataCamp" width="100%"></picture></a></h3>
 
-## 03 / Stack
+<p align="center">
+<a href="mailto:ghgabaisen@up.edu.ph"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/contact/email-still.svg?v=9abc1740"><img src="assets/contact/email.svg?v=0cca2b20" alt="Email: ghgabaisen@up.edu.ph" width="392"></picture></a>
+<a href="https://linkedin.com/in/geo-ceff-vinzr-gabaisen-43214a339/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/contact/linkedin-still.svg?v=b7b619bf"><img src="assets/contact/linkedin.svg?v=1cf801c3" alt="LinkedIn: Geo Ceff Vinzr Gabaisen" width="392"></picture></a><br>
+<a href="https://leetcode.com/u/Vinzr/"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/contact/leetcode-still.svg?v=40e23682"><img src="assets/contact/leetcode.svg?v=8df4be83" alt="LeetCode: leetcode.com/u/Vinzr" width="392"></picture></a>
+<a href="https://www.datacamp.com/portfolio/ghgabaisen"><picture><source media="(prefers-reduced-motion: reduce)" srcset="assets/contact/datacamp-still.svg?v=bacf45f1"><img src="assets/contact/datacamp.svg?v=1680b11b" alt="DataCamp: datacamp.com/portfolio/ghgabaisen" width="392"></picture></a>
+</p>
 
-<sub>LANGUAGES · WEB · DATA · GAME DEVELOPMENT · DELIVERY</sub>
-
-<img src="./assets/section-divider.svg" alt="" width="100%" />
-
-| Focus | Tools |
-| :-- | :-- |
-| **Languages** | <code>Python</code> <code>C</code> <code>C++</code> <code>JavaScript</code> <code>TypeScript</code> |
-| **Web** | <code>React</code> <code>Next.js</code> <code>HTML/CSS</code> <code>Browser extensions</code> |
-| **Data** | <code>Streamlit</code> <code>Pandas</code> <code>NumPy</code> <code>Plotly</code> |
-| **Games** | <code>Godot</code> <code>GDScript</code> <code>GDExtension</code> |
-| **Delivery** | <code>Git/GitHub</code> <code>GitHub Actions</code> <code>Docker</code> |
-
-<p align="center"><sub>CEBU, PHILIPPINES · PRACTICAL SYSTEMS · SHIPPED WITH RECEIPTS</sub></p>
+<p><a href="https://github.com/GeoCeff/GeoCeff"><picture><source media="(max-width: 600px) and (prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/footer-narrow-still-dark.svg?v=c83eb526"><source media="(max-width: 600px) and (prefers-reduced-motion: reduce)" srcset="assets/footer-narrow-still-light.svg?v=b57bca5a"><source media="(max-width: 600px) and (prefers-color-scheme: dark)" srcset="assets/footer-narrow-dark.svg?v=f0e7012c"><source media="(max-width: 600px)" srcset="assets/footer-narrow-light.svg?v=87d0f1a6"><source media="(prefers-reduced-motion: reduce) and (prefers-color-scheme: dark)" srcset="assets/footer-still-dark.svg?v=2308f530"><source media="(prefers-reduced-motion: reduce)" srcset="assets/footer-still-light.svg?v=63fe7315"><source media="(prefers-color-scheme: dark)" srcset="assets/footer-dark.svg?v=3097ab94"><img src="assets/footer-light.svg?v=da1625d3" alt="CEBU, PHILIPPINES · PRACTICAL SYSTEMS · SHIPPED WITH RECEIPTS" width="100%"></picture></a></p>
