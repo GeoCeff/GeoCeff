@@ -364,8 +364,8 @@ function banner(profile, { animated = true, narrow = false } = {}) {
 }
 
 // ---------------------------------------------------------------- ascii circuit-trace timing divider (refs: ascii-magic.com/ascii/circuit-trace)
-// 4 continuous end-to-end lines per divider; all 6 dividers (24 lanes) carry NIKI - "La La Lost You"
-// in 7-bit ASCII NRZ (HIGH = 1, LOW = 0, MSB -> LSB), with a via dot separating every word.
+// 4 continuous end-to-end lines per divider; all 7 dividers (28 lanes) carry the NIKI - "La La Lost You"
+// bridge/outro in 5-bit compact NRZ (HIGH = 1, LOW = 0, MSB -> LSB), with a via dot separating every word.
 const LALA_LYRICS = [
   "While I'm on Sunset, are you on the subway?",
   "While I drive, are you gettin' on the L-train?",
@@ -374,39 +374,32 @@ const LALA_LYRICS = [
   "Your toes turn blue in winter, I'm gettin' red, rum",
   "Does the trick for all of the things left unsaid, I'm",
   "Missin' our drunken 2 A.M. strolls in K-Town",
-  "And God, I miss you now",
-  "And the city never sleeps, oh, and I'm wide awake",
-  "And heartbreak is a place in Los Angeles",
-  "And it's mystifying how you're miles away",
-  "When you're occupying every space in Los Angeles",
-  "So how do you reinvent your favorite memory?",
-  "When the past is present tense and it's testin' me",
-  "La-la-la-la, lost you in Los Angeles",
-  "Is it hot in your apartment? 'Cause it's freezing in mine",
-  "And I'm sick of double-tapping old pictures just to fine-tune",
-  "The image of your face 'cause I'm starting to forget",
-  "And that scares me to death",
-  "We had high hopes and a whole lot of real estate",
-  "Oh, what a waste",
-  "And the city never sleeps, oh, and I'm wide awake",
-  "And heartbreak is a place in Los Angeles",
-  "And it's mystifying how you're miles away",
-  "When you're occupying every space in Los Angeles",
-  "So how do you reinvent your favorite memory?",
-  "When the past is present tense and it's testin' me",
-  "La-la-la-la, lost you in Los Angeles",
-  "La-la-la-la, lost you in Los Angeles",
-  "La-la-la-la, lost you in Los Angeles",
+  "Now you're chasing fake highs in the Upper West Side",
+  "And fuckin' on Brooklyns in Brooklyn",
+  "Your Chelseas in Chelsea",
+  "Hope that eases the pain, so you remember to miss me",
+  "And you sold your car, now you walk for miles",
+  "Bet your feet feel numb",
+  "(Crosswalks in my mind are shaky, so please hold on tight)",
+  "All my demons run wild",
+  "All my demons have your smile",
+  "In the city of angels, in the city of angels",
+  "Hope New York holds you",
+  "Hope it holds you like I do",
+  "While my demons stay faithful",
+  "In the city of angels",
 ];
+const ALPHA5 = "ABCDEFGHIKLMNOPRSTUVWY.,'-?()2JQ";
 const LYRIC_LANES = (() => {
+  const LANES = 28;
   const words = LALA_LYRICS.join(' ').trim().split(/\s+/);
   const total = words.reduce((a, w) => a + w.length, 0);
-  const out = Array.from({ length: 24 }, () => []);
+  const out = Array.from({ length: LANES }, () => []);
   let idx = 0, acc = 0;
   for (const w of words) {
     out[idx].push(w);
     acc += w.length;
-    if (idx < 23 && acc >= (idx + 1) * (total / 24) - 2) idx++;
+    if (idx < LANES - 1 && acc >= (idx + 1) * (total / LANES) - 1.5) idx++;
   }
   return out;
 })();
@@ -432,8 +425,9 @@ function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
   const wordEnds = new Set();
   laneWords.forEach((w, wi) => {
     for (let j = 0; j < w.length; j++) {
-      const code = w.charCodeAt(j) & 0x7f;
-      for (let b = 6; b >= 0; b--) bits.push((code >> b) & 1);
+      const idx = ALPHA5.indexOf(w[j].toUpperCase());
+      const code = idx >= 0 ? idx : (w.charCodeAt(j) & 31);
+      for (let b = 4; b >= 0; b--) bits.push((code >> b) & 1);
     }
     if (wi < laneWords.length - 1) wordEnds.add(bits.length);
   });
@@ -479,10 +473,10 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
   const narrow = w < 700;
   const sx0 = x + 6;
   const sx1 = x + w - 6;
-  const stepH = 6, laneGap = 11.5;
-  const sw = narrow ? 1.2 : 1.5;
-  const dash = narrow ? '3.4 1.2' : '4.5 1.6';
-  const viaR = narrow ? 1.85 : 2.15;
+  const stepH = 6, laneGap = 13;
+  const sw = narrow ? 1.35 : 1.6;
+  const dash = narrow ? '3.8 1.5' : '5.2 1.8';
+  const viaR = narrow ? 1.9 : 2.15;
   const padR = narrow ? 2.4 : 2.8;
 
   const baseG = [], animG = [], padsG = [];
@@ -553,7 +547,7 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
 const SECTION_SEED = { '01': 0, '02': 1, '03': 2, '04': 3 };
 function header(sec, t, { animated = true, narrow = false } = {}) {
   const yCircuit = narrow ? 120 : 128;
-  const W = narrow ? 600 : 1000, H = yCircuit + 50;
+  const W = narrow ? 600 : 1000, H = yCircuit + 56;
   const s = new SVG(W, H, `${sec.num} / ${sec.kicker}: ${sec.title}`, sec.sub);
   const p = [];
   const kSize = narrow ? 13.5 : 13;
@@ -1138,18 +1132,28 @@ function contactCard(c, { animated = true, begin = 0 } = {}) {
   return s.finish();
 }
 
-// ---------------------------------------------------------------- footer (transparent, themed)
-function footer(profile, updated, t, { animated = true, narrow = false } = {}) {
-  const W = narrow ? 600 : 1000, H = narrow ? 108 : 102;
-  const s = new SVG(W, H, profile.footer);
+// ---------------------------------------------------------------- pre-portrait circuit-trace divider (after Contact)
+function traceDivider(t, { animated = true, narrow = false } = {}) {
+  const W = narrow ? 600 : 1000, H = 58;
+  const s = new SVG(W, H, 'La La Lost You bridge timing trace divider');
   s.add(circuitTrace(s, { x: 4, y: 6, w: W - 8, lanes: 4, laneOffset: 20, t, animated, seed: 5 }));
-  s.add(s.text(profile.footer, W / 2, narrow ? 76 : 74, narrow ? 11.5 : 11, { face: 'mono', fill: t.dim, spacing: narrow ? 1.1 : 1.6, anchor: 'middle' }));
+  return s.finish();
+}
+
+// ---------------------------------------------------------------- footer (transparent, themed: caption above bottom 4-line circuit)
+function footer(profile, updated, t, { animated = true, narrow = false } = {}) {
+  const W = narrow ? 600 : 1000;
+  const yCircuit = updated ? (narrow ? 56 : 52) : (narrow ? 36 : 34);
+  const H = yCircuit + 54;
+  const s = new SVG(W, H, profile.footer);
+  s.add(s.text(profile.footer, W / 2, narrow ? 18 : 16, narrow ? 11.5 : 11, { face: 'mono', fill: t.dim, spacing: narrow ? 1.1 : 1.6, anchor: 'middle' }));
   if (updated) {
     const updText = `METRICS REFRESHED ${updated}`;
-    const uy = narrow ? 96 : 92, us = narrow ? 10 : 9, uw = s.measure(updText, us, 'mono', 1.4);
+    const uy = narrow ? 38 : 34, us = narrow ? 10 : 9, uw = s.measure(updText, us, 'mono', 1.4);
     s.add(`<circle cx="${W / 2 - uw / 2 - 10}" cy="${uy - 3.5}" r="2.4" fill="${t.accent}" opacity=".75">${animated ? '<animate attributeName="opacity" values="1;.2;1" dur="2s" repeatCount="indefinite"/></circle>' : '</circle>'}`);
     s.add(s.text(updText, W / 2, uy, us, { face: 'mono', fill: t.dim, spacing: 1.4, anchor: 'middle', attrs: 'opacity=".7"' }));
   }
+  s.add(circuitTrace(s, { x: 4, y: yCircuit, w: W - 8, lanes: 4, laneOffset: 24, t, animated, seed: 6 }));
   return s.finish();
 }
 
@@ -1252,4 +1256,4 @@ function asciiArt({ animated = true } = {}) {
   return s.finish();
 }
 
-module.exports = { banner, header, intro, projectCard, projectLines, stackBanner, contributionsCard, leetcodeCard, languagesCard, metricsBanner, metricsBannerNarrow, contactCard, footer, asciiArt, CW, CPAD, LW, LH };
+module.exports = { banner, header, intro, projectCard, projectLines, stackBanner, contributionsCard, leetcodeCard, languagesCard, metricsBanner, metricsBannerNarrow, contactCard, traceDivider, footer, asciiArt, CW, CPAD, LW, LH };

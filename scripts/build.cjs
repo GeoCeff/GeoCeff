@@ -59,6 +59,10 @@ both('metrics-banner-narrow', a => A.metricsBannerNarrow(stats, { animated: a })
 
 contacts.forEach((c, i) => both(`contact/${c.id}`, a => A.contactCard(c, { animated: a, begin: +(-(i * 1.55)).toFixed(2) })));
 for (const [mode, t] of [['dark', NIGHT], ['light', LIGHT]]) {
+  write(`trace-divider-${mode}.svg`, A.traceDivider(t, { animated: true }));
+  write(`trace-divider-still-${mode}.svg`, A.traceDivider(t, { animated: false }));
+  write(`trace-divider-narrow-${mode}.svg`, A.traceDivider(t, { animated: true, narrow: true }));
+  write(`trace-divider-narrow-still-${mode}.svg`, A.traceDivider(t, { animated: false, narrow: true }));
   write(`footer-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: true }));
   write(`footer-still-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: false }));
   write(`footer-narrow-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: true, narrow: true }));
@@ -121,8 +125,9 @@ out.push(`<a href="${profile.portfolio}#skills"><picture>${src(`${NW} and ${RM}`
 
 out.push(h3('contact', sections.contact, contacts[0].href));
 out.push(grid2(contacts.map(c => `<a href="${c.href}">${motion(`contact/${c.id}`, `${c.label}: ${c.value}`, `width="${cardW}"`)}</a>`)));
-out.push(`<p><a href="${gh}/${profile.github}">${themed('footer', profile.footer, 'width="100%"', { still: true, narrow: true })}</a></p>`);
+out.push(`<p>${themed('trace-divider', 'La La Lost You circuit timing trace divider', 'width="100%"', { still: true, narrow: true })}</p>`);
 out.push(`<p>${motion('ascii-art', 'Animated ASCII art portrait at the bottom of the profile', 'width="100%"')}</p>`);
+out.push(`<p><a href="${gh}/${profile.github}">${themed('footer', profile.footer, 'width="100%"', { still: true, narrow: true })}</a></p>`);
 
 fs.writeFileSync(path.join(ROOT, 'README.md'), out.join('\n\n') + '\n');
 const total = Object.keys(hashes).length;
