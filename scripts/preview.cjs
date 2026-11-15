@@ -36,7 +36,7 @@ fs.writeFileSync(html, `<!doctype html><meta charset="utf-8"><base href="file://
 const file = path.join(OUT, `${scheme}-${size}${motion ? '-' + motion : ''}.png`);
 execFileSync(browser, ['--headless=new', '--disable-gpu', '--hide-scrollbars', '--allow-file-access-from-files',
   `--blink-settings=preferredColorScheme=${dark ? 0 : 1}`, `--force-prefers-color-scheme=${scheme}`,
-  `--window-size=${inner + 82},${size === 'wide' ? 4400 : 5700}`, '--virtual-time-budget=5000',
+  `--window-size=${inner + 82},${size === 'wide' ? 4550 : 5850}`, '--virtual-time-budget=5000',
   `--screenshot=${file}`, 'file:///' + html.replace(/\\/g, '/')], { stdio: 'ignore' });
 fs.unlinkSync(html);
 console.log('wrote', path.relative(ROOT, file));

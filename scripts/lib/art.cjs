@@ -364,8 +364,52 @@ function banner(profile, { animated = true, narrow = false } = {}) {
 }
 
 // ---------------------------------------------------------------- ascii circuit-trace timing divider (refs: ascii-magic.com/ascii/circuit-trace)
-// 4 continuous end-to-end lines, each repeating one word in binary NRZ (HIGH = 1, LOW = 0, MSB -> LSB)
-const CIRCUIT_WORDS = ['Wow ', 'You ', 'Found ', 'Me '];
+// 4 continuous end-to-end lines per divider; all 6 dividers (24 lanes) carry NIKI - "La La Lost You"
+// in 7-bit ASCII NRZ (HIGH = 1, LOW = 0, MSB -> LSB), with a via dot separating every word.
+const LALA_LYRICS = [
+  "While I'm on Sunset, are you on the subway?",
+  "While I drive, are you gettin' on the L-train?",
+  "I mean, Manhattan's nice, but so are Malibu nights",
+  "You would know if you stayed, you would know if you put up a fight",
+  "Your toes turn blue in winter, I'm gettin' red, rum",
+  "Does the trick for all of the things left unsaid, I'm",
+  "Missin' our drunken 2 A.M. strolls in K-Town",
+  "And God, I miss you now",
+  "And the city never sleeps, oh, and I'm wide awake",
+  "And heartbreak is a place in Los Angeles",
+  "And it's mystifying how you're miles away",
+  "When you're occupying every space in Los Angeles",
+  "So how do you reinvent your favorite memory?",
+  "When the past is present tense and it's testin' me",
+  "La-la-la-la, lost you in Los Angeles",
+  "Is it hot in your apartment? 'Cause it's freezing in mine",
+  "And I'm sick of double-tapping old pictures just to fine-tune",
+  "The image of your face 'cause I'm starting to forget",
+  "And that scares me to death",
+  "We had high hopes and a whole lot of real estate",
+  "Oh, what a waste",
+  "And the city never sleeps, oh, and I'm wide awake",
+  "And heartbreak is a place in Los Angeles",
+  "And it's mystifying how you're miles away",
+  "When you're occupying every space in Los Angeles",
+  "So how do you reinvent your favorite memory?",
+  "When the past is present tense and it's testin' me",
+  "La-la-la-la, lost you in Los Angeles",
+  "La-la-la-la, lost you in Los Angeles",
+  "La-la-la-la, lost you in Los Angeles",
+];
+const LYRIC_LANES = (() => {
+  const words = LALA_LYRICS.join(' ').trim().split(/\s+/);
+  const total = words.reduce((a, w) => a + w.length, 0);
+  const out = Array.from({ length: 24 }, () => []);
+  let idx = 0, acc = 0;
+  for (const w of words) {
+    out[idx].push(w);
+    acc += w.length;
+    if (idx < 23 && acc >= (idx + 1) * (total / 24) - 2) idx++;
+  }
+  return out;
+})();
 const CIRCUIT_PAL = {
   dark: {
     pad: '#2f5a9e', via: '#3a6bb5', hole: '#0d1117',
@@ -383,43 +427,42 @@ const CIRCUIT_PAL = {
   },
 };
 
-function laneTraceGeom(word, totalBytes, x0, x1, yHi, yLo) {
-  const bytes = Buffer.from(word, 'ascii');
+function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
+  const bits = [];
+  const wordEnds = new Set();
+  laneWords.forEach((w, wi) => {
+    for (let j = 0; j < w.length; j++) {
+      const code = w.charCodeAt(j) & 0x7f;
+      for (let b = 6; b >= 0; b--) bits.push((code >> b) & 1);
+    }
+    if (wi < laneWords.length - 1) wordEnds.add(bits.length);
+  });
+
   const lead = Math.min(18, (x1 - x0) * 0.025);
-  const totalBits = totalBytes * 8;
+  const totalBits = bits.length;
   const bw = (x1 - x0 - 2 * lead) / totalBits;
   const pts = [[x0, yLo], [x0 + lead, yLo]];
   let curY = yLo;
   let len = lead;
   const vias = [];
-  let flatStart = 0;
 
   for (let i = 0; i < totalBits; i++) {
-    const ch = bytes[Math.floor(i / 8) % bytes.length];
-    const bit = (ch >> (7 - (i % 8))) & 1;
-    const ny = bit ? yHi : yLo;
+    const ny = bits[i] ? yHi : yLo;
     const bx0 = x0 + lead + i * bw;
     const bx1 = bx0 + bw;
+    if (wordEnds.has(i)) {
+      const halfStep = ny !== curY ? Math.abs(ny - curY) / 2 : 0;
+      vias.push({ x: bx0, y: ny !== curY ? (yHi + yLo) / 2 : curY, len: len + halfStep });
+    }
     if (ny !== curY) {
-      if (i - flatStart >= 3) {
-        const vx = x0 + lead + ((flatStart + i) / 2) * bw;
-        const vl = len - ((i - flatStart) * bw) / 2;
-        vias.push({ x: vx, y: curY, len: vl });
-      }
       pts.push([bx0, ny]);
       len += Math.abs(ny - curY);
       curY = ny;
-      flatStart = i;
     }
     pts.push([bx1, ny]);
     len += bw;
   }
   if (curY !== yLo) {
-    if (totalBits - flatStart >= 3) {
-      const vx = x0 + lead + ((flatStart + totalBits) / 2) * bw;
-      const vl = len - ((totalBits - flatStart) * bw) / 2;
-      vias.push({ x: vx, y: curY, len: vl });
-    }
     pts.push([x1 - lead, yLo]);
     len += Math.abs(yLo - curY);
   }
@@ -428,28 +471,29 @@ function laneTraceGeom(word, totalBytes, x0, x1, yHi, yLo) {
 
   const f = n => +n.toFixed(1);
   const d = 'M' + pts.map(([px, py]) => `${f(px)} ${f(py)}`).join('L');
-  // sample up to 5 well-spaced vias per continuous line
-  const picked = [];
-  const step = Math.max(1, Math.floor(vias.length / 5));
-  for (let i = 0; i < vias.length && picked.length < 5; i += step) picked.push(vias[i]);
-  return { d, len: +len.toFixed(1), vias: picked };
+  return { d, len: +len.toFixed(1), vias };
 }
 
-function circuitTrace(s, { x = 4, y, w, cols = 96, lanes = 4, words = CIRCUIT_WORDS, t, animated = true, seed = 0 } = {}) {
+function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated = true, seed = 0 } = {}) {
   const pal = t.ink === '#f4f9ff' ? CIRCUIT_PAL.dark : CIRCUIT_PAL.light;
-  const totalBytes = 12; // 96 bits divides 'Wow '(4), 'You '(4), 'Found '(6), 'Me '(3) cleanly end-to-end
+  const narrow = w < 700;
   const sx0 = x + 6;
   const sx1 = x + w - 6;
   const stepH = 6, laneGap = 11.5;
+  const sw = narrow ? 1.2 : 1.5;
+  const dash = narrow ? '3.4 1.2' : '4.5 1.6';
+  const viaR = narrow ? 1.85 : 2.15;
+  const padR = narrow ? 2.4 : 2.8;
 
   const baseG = [], animG = [], padsG = [];
   for (let lane = 0; lane < lanes; lane++) {
     const yHi = y + lane * laneGap;
     const yLo = yHi + stepH;
     const cFam = pal.fam[(lane + seed) % 2];
-    const { d, len, vias } = laneTraceGeom(words[lane % words.length], totalBytes, sx0, sx1, yHi, yLo);
+    const laneWords = LYRIC_LANES[(laneOffset + lane) % LYRIC_LANES.length];
+    const { d, len, vias } = laneTraceGeom(laneWords, sx0, sx1, yHi, yLo);
 
-    baseG.push(`<path d="${d}" fill="none" stroke="${cFam.rest}" stroke-width="1.6" stroke-dasharray="5.5 2" stroke-linejoin="miter"/>`);
+    baseG.push(`<path d="${d}" fill="none" stroke="${cFam.rest}" stroke-width="${sw}" stroke-dasharray="${dash}" stroke-linejoin="miter"/>`);
 
     if (animated) {
       const wakeLen = 58, coreLen = 14;
@@ -464,41 +508,41 @@ function circuitTrace(s, { x = 4, y, w, cols = 96, lanes = 4, words = CIRCUIT_WO
       // 2 staggered packets per line, with head locked cleanly at dash leading edge
       for (const begin of [b1, b2]) {
         animG.push(
-          `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="2" stroke-dasharray="${wakeLen} ${dashGap}" stroke-linecap="square" stroke-linejoin="miter">`
+          `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="${sw + 0.45}" stroke-dasharray="${wakeLen} ${dashGap}" stroke-linecap="square" stroke-linejoin="miter">`
           + `<animate attributeName="stroke-dashoffset" values="${wakeLen};-${len.toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="${coreLen} ${dashGap + wakeLen}" stroke-linecap="square" stroke-linejoin="miter">`
+          + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="${sw + 0.85}" stroke-dasharray="${coreLen} ${dashGap + wakeLen}" stroke-linecap="square" stroke-linejoin="miter">`
           + `<animate attributeName="stroke-dashoffset" values="${coreLen};-${(len + wakeLen - coreLen).toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<rect x="-2.8" y="-2.8" width="5.6" height="5.6" rx="0.6" fill="${cFam.peak}">`
+          + `<rect x="-2.6" y="-2.6" width="5.2" height="5.2" rx="0.6" fill="${cFam.peak}">`
           + `<animateMotion path="${d}" keyPoints="0;1;1" keyTimes="0;${frac};1" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/>`
           + `<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;${frac};${fracOff};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></rect>`
         );
       }
 
-      // end-cap pads & vias flash twice per dur cycle (synced to both packets via half-period dur/2)
+      // end-cap pads & per-word via dots flash twice per dur cycle (synced to both packets via half-period dur/2)
       const hDur = +(dur / 2).toFixed(2);
       const kHalf = u => +((((u % 0.5) + 0.5) % 0.5) * 2).toFixed(3);
       const kEnd = Math.max(0.05, Math.min(0.92, kHalf(frac)));
       padsG.push(
-        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.14;1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`,
-        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"><animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${+(kEnd - 0.04).toFixed(3)};${Math.min(0.99, +(kEnd + 0.08).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`
+        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.14;1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`,
+        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${+(kEnd - 0.04).toFixed(3)};${Math.min(0.99, +(kEnd + 0.08).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`
       );
       for (const v of vias) {
         const vt = Math.max(0.05, Math.min(0.90, kHalf((v.len / len) * frac)));
-        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"><animate attributeName="stroke" values="${pal.via};${cFam.core};${pal.via};${pal.via}" keyTimes="0;${vt};${Math.min(0.98, +(vt + 0.1).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`);
+        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="${viaR}" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.35"><animate attributeName="stroke" values="${pal.via};${cFam.core};${pal.via};${pal.via}" keyTimes="0;${vt};${Math.min(0.98, +(vt + 0.1).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`);
       }
     } else {
       // reduced-motion static snapshot: freeze 1 mid-flight pulse per lane
       const off = -(len * (0.22 + ((lane + seed) % 4) * 0.16));
       animG.push(
-        `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="2" stroke-dasharray="52 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
-        + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="14 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
+        `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="${sw + 0.45}" stroke-dasharray="52 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
+        + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="${sw + 0.85}" stroke-dasharray="14 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
       );
       padsG.push(
-        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`,
-        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`
+        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"/>`,
+        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"/>`
       );
       for (const v of vias) {
-        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"/>`);
+        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="${viaR}" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.35"/>`);
       }
     }
   }
@@ -509,7 +553,7 @@ function circuitTrace(s, { x = 4, y, w, cols = 96, lanes = 4, words = CIRCUIT_WO
 const SECTION_SEED = { '01': 0, '02': 1, '03': 2, '04': 3 };
 function header(sec, t, { animated = true, narrow = false } = {}) {
   const yCircuit = narrow ? 120 : 128;
-  const W = narrow ? 600 : 1000, H = yCircuit + 26;
+  const W = narrow ? 600 : 1000, H = yCircuit + 50;
   const s = new SVG(W, H, `${sec.num} / ${sec.kicker}: ${sec.title}`, sec.sub);
   const p = [];
   const kSize = narrow ? 13.5 : 13;
@@ -530,8 +574,7 @@ function header(sec, t, { animated = true, narrow = false } = {}) {
   }
 
   const seed = SECTION_SEED[sec.num] ?? 0;
-  const hWords = seed % 2 === 0 ? ['Wow ', 'You '] : ['Found ', 'Me '];
-  p.push(circuitTrace(s, { x: 4, y: yCircuit, w: W - 8, cols: narrow ? 76 : 96, lanes: 2, words: hWords, t, animated, seed }));
+  p.push(circuitTrace(s, { x: 4, y: yCircuit, w: W - 8, lanes: 4, laneOffset: (seed + 1) * 4, t, animated, seed }));
   s.add(...p);
   return s.finish();
 }
@@ -541,7 +584,7 @@ function intro(profile, t, { animated = true, narrow = false } = {}) {
   const W = narrow ? 600 : 1000;
   const s = new SVG(W, 10, `Profile: ${profile.focus}`, `Status: ${profile.chips.join(', ')}.`);
   const p = [];
-  p.push(circuitTrace(s, { x: 4, y: 6, w: W - 8, cols: narrow ? 76 : 96, t, animated, seed: 4 }));
+  p.push(circuitTrace(s, { x: 4, y: 6, w: W - 8, lanes: 4, laneOffset: 0, t, animated, seed: 4 }));
   const buildingDot = (cx, cy, r) =>
     `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${t.accent}">${animated ? '<animate attributeName="opacity" values="1;.2;1" dur="1.7s" repeatCount="indefinite"/></circle>' : '</circle>'}`;
   if (!narrow) {
@@ -1099,7 +1142,7 @@ function contactCard(c, { animated = true, begin = 0 } = {}) {
 function footer(profile, updated, t, { animated = true, narrow = false } = {}) {
   const W = narrow ? 600 : 1000, H = narrow ? 108 : 102;
   const s = new SVG(W, H, profile.footer);
-  s.add(circuitTrace(s, { x: 4, y: 6, w: W - 8, cols: narrow ? 76 : 96, t, animated, seed: 5 }));
+  s.add(circuitTrace(s, { x: 4, y: 6, w: W - 8, lanes: 4, laneOffset: 20, t, animated, seed: 5 }));
   s.add(s.text(profile.footer, W / 2, narrow ? 76 : 74, narrow ? 11.5 : 11, { face: 'mono', fill: t.dim, spacing: narrow ? 1.1 : 1.6, anchor: 'middle' }));
   if (updated) {
     const updText = `METRICS REFRESHED ${updated}`;
@@ -1110,15 +1153,16 @@ function footer(profile, updated, t, { animated = true, narrow = false } = {}) {
   return s.finish();
 }
 
-// ---------------------------------------------------------------- bottom ASCII artwork (188x64, density-locked char randomization)
+// ---------------------------------------------------------------- bottom ASCII artwork (188x64, frameless, density-locked char randomization)
 let _asciiCache = null;
 function asciiArt({ animated = true } = {}) {
   if (!_asciiCache) _asciiCache = JSON.parse(fs.readFileSync(path.join(ART, 'ascii-art.json'), 'utf8'));
-  const { columns: cols, rows, text, colors } = _asciiCache;
-  const W = 1000, padX = 14, padY = 14, aw = W - padX * 2, ah = 544, H = ah + padY * 2;
+  const { columns: cols, text, colors } = _asciiCache;
+  let rows = _asciiCache.rows;
+  while (rows > 0 && !text[rows - 1].trim()) rows--;
+  const W = 1000, H = Math.round((W * rows / _asciiCache.rows) * 620 / 1106);
   const s = new SVG(W, H, 'ASCII portrait artwork', 'Animated ASCII art portrait in midnight blues and highlights.');
-  s.def(`<clipPath id="aac"><rect width="${W}" height="${H}" rx="12"/></clipPath>`);
-  const parts = [`<g clip-path="url(#aac)"><rect width="${W}" height="${H}" rx="12" fill="#02050d"/>`];
+  const parts = [];
 
   const RAMP = ['.', '-', ':', ';', '=', '+', 's', 'S', 'x', '0', 'X', '8', '#', '@'];
   const gMap = {};
@@ -1128,7 +1172,7 @@ function asciiArt({ animated = true } = {}) {
     gMap[ch] = info.id;
     upm = info.upm;
   }
-  const cellW = aw / cols, cellH = ah / rows, fSz = cellH * .98;
+  const cellW = W / cols, cellH = H / rows, fSz = cellH * .98;
   const sc = +(fSz / upm).toFixed(5);
   const hash = (a, b, k) => {
     let x = (Math.imul(a + 1, 374761393) + Math.imul(b + 1, 668265263) + Math.imul(k + 1, 1442695041)) >>> 0;
@@ -1156,7 +1200,7 @@ function asciiArt({ animated = true } = {}) {
       }
     }
     const layers = [...buckets].map(([fill, items]) => `<g fill="${fill}">${items.join('')}</g>`).join('');
-    parts.push(`<g transform="translate(${padX} ${padY}) scale(${sc})">${layers}</g>`);
+    parts.push(`<g transform="scale(${sc})">${layers}</g>`);
   } else {
     const G = 8, S = 3;
     const DURS = [0.91, 1.07, 1.23, 1.39, 1.57, 1.73, 1.91, 2.09];
@@ -1201,11 +1245,9 @@ function asciiArt({ animated = true } = {}) {
         out.push(`<g visibility="${st === 0 ? 'visible' : 'hidden'}">${layers}<animate attributeName="visibility" values="${vis}" keyTimes="${kt}" calcMode="discrete" dur="${dur}" begin="${begin}" repeatCount="indefinite"/></g>`);
       }
     }
-    parts.push(`<g transform="translate(${padX} ${padY}) scale(${sc})">${out.join('')}</g>`);
+    parts.push(`<g transform="scale(${sc})">${out.join('')}</g>`);
   }
 
-  parts.push(brackets(8, 8, W - 16, H - 16, 14, '#6ba9ff', .28, animated));
-  parts.push(`</g><rect width="${W}" height="${H}" rx="12" fill="none" stroke="${NIGHT.line}"/>`);
   s.add(...parts);
   return s.finish();
 }
