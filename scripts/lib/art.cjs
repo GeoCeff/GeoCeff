@@ -197,11 +197,11 @@ function banner(profile, { animated = true, narrow = false } = {}) {
     + (animated ? '<animate attributeName="opacity" values=".65;1;.65" dur="4.6s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></ellipse>' : '</ellipse>');
   parts.push(glow);
   if (animated) {
-    // moonlit-sea style continuous ASCII swell + moonlight glints + twinkling stars (anchored fixed inside frame)
+    // 8 asynchronous cell groups x 5 randomized character states -> smooth ~25 updates/sec shimmer preserving portrait shape
     const { cols, rows, cells, stars } = portraitCells(54, 40);
     const cellW = P.w / cols, cellH = P.h / rows, fSz = cellH * .92;
     const RAMP = '.:-=+*#%@';
-    const COLORS = ['#4c8ef0', '#6fb0ff', '#a3d1ff', '#e0eeff', '#fff4cc'];
+    const COLORS = ['#4c8ef0', '#6fb0ff', '#a3d1ff', '#e0eeff', '#ffffff'];
     const gMap = {};
     let upm = 1000;
     for (const ch of new Set([...RAMP, '*'])) {
@@ -210,39 +210,69 @@ function banner(profile, { animated = true, narrow = false } = {}) {
       upm = info.upm;
     }
     const sc = +(fSz / upm).toFixed(5);
-    const N = 8, dur = '2.4s';
-    const kt = Array.from({ length: N }, (_, i) => +(i / N).toFixed(4)).join(';');
-    const frames = [];
-    for (let f = 0; f < N; f++) {
-      const phi = (2 * Math.PI * f) / N;
-      const buckets = Array.from({ length: COLORS.length }, () => []);
-      for (const { c, r, lum } of cells) {
-        const base = Math.pow(Math.min(1, Math.max(0, (lum - 10) / 110)), 0.62);
-        const u = c / cols, v = r / rows;
-        const swell = 0.55 * Math.sin(u * 8.0 + v * 3.2 - phi)
-          + 0.30 * Math.sin(u * 13.5 - v * 6.0 + 2 * phi + 1.1)
-          + 0.15 * Math.cos(u * 20.0 + v * 10.5 - phi + 0.6);
-        const crest = Math.sin(c * 0.58 + r * 1.12 - 3 * phi);
-        const glint = base > 0.45 && swell > 0.16 && crest > 0.52;
-        const m = Math.max(0.14, Math.min(1, base * (0.88 + 0.22 * swell) + (glint ? 0.20 : 0)));
-        const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(m * RAMP.length))];
-        const ci = glint ? 4 : Math.min(3, Math.floor(m * 3.85));
-        const gx = Math.round((c * cellW) / sc), gy = Math.round(((r + 0.82) * cellH) / sc);
-        if (gMap[ch]) buckets[ci].push(`<use href="#${gMap[ch]}" x="${gx}" y="${gy}"/>`);
-      }
-      for (const st of stars) {
-        const tw = Math.sin(phi + st.phase);
-        if (tw <= 0.15) continue;
-        const ch = tw > 0.72 ? '*' : '.';
-        const ci = tw > 0.85 ? 4 : tw > 0.55 ? 3 : 1;
-        const gx = Math.round((st.c * cellW) / sc), gy = Math.round(((st.r + 0.82) * cellH) / sc);
-        if (gMap[ch]) buckets[ci].push(`<use href="#${gMap[ch]}" x="${gx}" y="${gy}"/>`);
-      }
-      const vis = Array.from({ length: N }, (_, i) => (i === f ? 'visible' : 'hidden')).join(';');
-      const layers = buckets.map((b, ci) => b.length ? `<g fill="${COLORS[ci]}">${b.join('')}</g>` : '').join('');
-      frames.push(`<g transform="translate(${P.x} ${P.y}) scale(${sc})" visibility="${f === 0 ? 'visible' : 'hidden'}">${layers}<animate attributeName="visibility" values="${vis}" keyTimes="${kt}" calcMode="discrete" dur="${dur}" repeatCount="indefinite"/></g>`);
+    const hash = (a, b, k) => {
+      let x = (Math.imul(a + 1, 374761393) + Math.imul(b + 1, 668265263) + Math.imul(k + 1, 1442695041)) >>> 0;
+      x = Math.imul(x ^ (x >>> 13), 1274126177) >>> 0;
+      return ((x ^ (x >>> 16)) >>> 0) / 4294967296;
+    };
+
+    const G = 8, S = 5;
+    const DURS = [1.05, 1.22, 1.38, 1.54, 1.71, 1.87, 2.04, 2.21];
+    const kt = Array.from({ length: S }, (_, i) => +(i / S).toFixed(3)).join(';');
+    const grouped = Array.from({ length: G }, () => []);
+    for (const cell of cells) {
+      const g = Math.floor(hash(cell.c, cell.r, 91) * G);
+      grouped[g].push(cell);
     }
-    parts.push(`<g>${frames.join('')}</g>`);
+
+    const out = [];
+    for (let g = 0; g < G; g++) {
+      const dur = `${DURS[g]}s`;
+      const begin = `-${+((g * 0.19) % DURS[g]).toFixed(2)}s`;
+      for (let st = 0; st < S; st++) {
+        const phi = (2 * Math.PI * st) / S;
+        const buckets = Array.from({ length: COLORS.length }, () => []);
+        for (const { c, r, lum } of grouped[g]) {
+          const base = Math.pow(Math.min(1, Math.max(0, (lum - 10) / 110)), 0.62);
+          const u = c / cols, v = r / rows;
+          const wave = 0.08 * Math.sin(u * 8.0 + v * 3.2 - phi);
+          const rand = (hash(c, r, st * 13 + g) - 0.5) * 0.28; // randomized character swap within local density band
+          const glint = base > 0.58 && hash(c, r, st * 29 + 7) > 0.92;
+          const m = Math.max(0.10, Math.min(1, base + wave + rand + (glint ? 0.14 : 0)));
+          const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(m * RAMP.length))];
+          const ci = glint ? 4 : Math.min(3, Math.floor(m * 3.85));
+          const gx = Math.round((c * cellW) / sc), gy = Math.round(((r + 0.82) * cellH) / sc);
+          if (gMap[ch]) buckets[ci].push(`<use href="#${gMap[ch]}" x="${gx}" y="${gy}"/>`);
+        }
+        const vis = Array.from({ length: S }, (_, i) => (i === st ? 'visible' : 'hidden')).join(';');
+        const layers = buckets.map((b, ci) => b.length ? `<g fill="${COLORS[ci]}">${b.join('')}</g>` : '').join('');
+        out.push(`<g transform="translate(${P.x} ${P.y}) scale(${sc})" visibility="${st === 0 ? 'visible' : 'hidden'}">${layers}<animate attributeName="visibility" values="${vis}" keyTimes="${kt}" calcMode="discrete" dur="${dur}" begin="${begin}" repeatCount="indefinite"/></g>`);
+      }
+    }
+
+    // staggered randomized sky star twinkles outside portrait silhouette
+    const starBuckets = Array.from({ length: 4 }, () => []);
+    for (const st of stars) starBuckets[Math.floor(hash(st.c, st.r, 53) * 4)].push(st);
+    for (let b = 0; b < 4; b++) {
+      const sdur = `${(1.8 + b * 0.45).toFixed(2)}s`;
+      const sbegin = `-${(b * 0.37).toFixed(2)}s`;
+      for (let stIdx = 0; stIdx < 3; stIdx++) {
+        const layers = [[], [], []];
+        for (const st of starBuckets[b]) {
+          const r = hash(st.c, st.r, stIdx * 17 + 3);
+          if (r < 0.42) continue;
+          const ch = r > 0.82 ? '*' : '.';
+          const ci = r > 0.90 ? 2 : r > 0.68 ? 1 : 0;
+          const gx = Math.round((st.c * cellW) / sc), gy = Math.round(((st.r + 0.82) * cellH) / sc);
+          if (gMap[ch]) layers[ci].push(`<use href="#${gMap[ch]}" x="${gx}" y="${gy}"/>`);
+        }
+        const fills = ['#6fb0ff', '#e0eeff', '#ffffff'];
+        const vis = Array.from({ length: 3 }, (_, i) => (i === stIdx ? 'visible' : 'hidden')).join(';');
+        const body = layers.map((items, ci) => items.length ? `<g fill="${fills[ci]}">${items.join('')}</g>` : '').join('');
+        out.push(`<g transform="translate(${P.x} ${P.y}) scale(${sc})" visibility="${stIdx === 0 ? 'visible' : 'hidden'}">${body}<animate attributeName="visibility" values="${vis}" keyTimes="0;0.333;0.667" calcMode="discrete" dur="${sdur}" begin="${sbegin}" repeatCount="indefinite"/></g>`);
+      }
+    }
+    parts.push(`<g>${out.join('')}</g>`);
   } else {
     parts.push(portrait);
   }
@@ -330,51 +360,62 @@ function banner(profile, { animated = true, narrow = false } = {}) {
 }
 
 // ---------------------------------------------------------------- ascii circuit-trace timing divider (refs: ascii-magic.com/ascii/circuit-trace)
-// 16 ASCII bytes across 4 lanes x 4 segments; HIGH level = 1, LOW level = 0, MSB -> LSB per byte
-const CIRCUIT_MSG = Buffer.from('Wow You Found Me', 'ascii');
+// 4 continuous end-to-end lines, each repeating one word in binary NRZ (HIGH = 1, LOW = 0, MSB -> LSB)
+const CIRCUIT_WORDS = ['Wow ', 'You ', 'Found ', 'Me '];
 const CIRCUIT_PAL = {
   dark: {
-    pad: '#d29922', via: '#9e6a03', hole: '#0d1117',
+    pad: '#2f5a9e', via: '#3a6bb5', hole: '#0d1117',
     fam: [
-      { rest: '#163d28', wake: '#2ea043', core: '#7ee787', peak: '#e6ffed' }, // emerald green (~65%)
-      { rest: '#15324c', wake: '#1f6feb', core: '#79c0ff', peak: '#f0f8ff' }, // electric cyan (~35%)
+      { rest: '#162a4d', wake: '#256bc4', core: '#6ba9ff', peak: '#f4f9ff' }, // night cobalt
+      { rest: '#1b335c', wake: '#4a92ff', core: '#9dccff', peak: '#ffffff' }, // icy azure
     ],
   },
   light: {
-    pad: '#b87300', via: '#9a6700', hole: '#ffffff',
+    pad: '#5678ad', via: '#4468a3', hole: '#ffffff',
     fam: [
-      { rest: '#bfe3ca', wake: '#2ea043', core: '#116329', peak: '#073b17' },
-      { rest: '#c2d8f5', wake: '#216ee0', core: '#0a3069', peak: '#051d40' },
+      { rest: '#cfddf2', wake: '#2a6fd8', core: '#164eb2', peak: '#0b1830' },
+      { rest: '#c2d3ee', wake: '#1f63d6', core: '#0f3c8f', peak: '#071429' },
     ],
   },
 };
 
-function traceGeom(byteVal, x0, x1, yHi, yLo) {
-  const lead = (x1 - x0) / 10; // leaves 8 equal bit slots between lead-in and lead-out stubs
-  const bw = (x1 - x0 - 2 * lead) / 8;
+function laneTraceGeom(word, totalBytes, x0, x1, yHi, yLo) {
+  const bytes = Buffer.from(word, 'ascii');
+  const lead = Math.min(18, (x1 - x0) * 0.025);
+  const totalBits = totalBytes * 8;
+  const bw = (x1 - x0 - 2 * lead) / totalBits;
   const pts = [[x0, yLo], [x0 + lead, yLo]];
   let curY = yLo;
   let len = lead;
   const vias = [];
   let flatStart = 0;
 
-  for (let b = 0; b < 8; b++) {
-    const bit = (byteVal >> (7 - b)) & 1;
+  for (let i = 0; i < totalBits; i++) {
+    const ch = bytes[Math.floor(i / 8) % bytes.length];
+    const bit = (ch >> (7 - (i % 8))) & 1;
     const ny = bit ? yHi : yLo;
-    const bx0 = x0 + lead + b * bw;
+    const bx0 = x0 + lead + i * bw;
     const bx1 = bx0 + bw;
     if (ny !== curY) {
-      if (b - flatStart >= 2) vias.push({ x: (x0 + lead + ((flatStart + b) / 2) * bw), y: curY, t: len - (b - flatStart) * bw / 2 });
+      if (i - flatStart >= 3) {
+        const vx = x0 + lead + ((flatStart + i) / 2) * bw;
+        const vl = len - ((i - flatStart) * bw) / 2;
+        vias.push({ x: vx, y: curY, len: vl });
+      }
       pts.push([bx0, ny]);
       len += Math.abs(ny - curY);
       curY = ny;
-      flatStart = b;
+      flatStart = i;
     }
     pts.push([bx1, ny]);
     len += bw;
   }
   if (curY !== yLo) {
-    if (8 - flatStart >= 2) vias.push({ x: (x0 + lead + ((flatStart + 8) / 2) * bw), y: curY, t: len - (8 - flatStart) * bw / 2 });
+    if (totalBits - flatStart >= 3) {
+      const vx = x0 + lead + ((flatStart + totalBits) / 2) * bw;
+      const vl = len - ((totalBits - flatStart) * bw) / 2;
+      vias.push({ x: vx, y: curY, len: vl });
+    }
     pts.push([x1 - lead, yLo]);
     len += Math.abs(yLo - curY);
   }
@@ -383,80 +424,77 @@ function traceGeom(byteVal, x0, x1, yHi, yLo) {
 
   const f = n => +n.toFixed(1);
   const d = 'M' + pts.map(([px, py]) => `${f(px)} ${f(py)}`).join('L');
-  const via = vias.length ? vias[byteVal % vias.length] : null;
-  return { d, len: +len.toFixed(1), via };
+  // sample up to 5 well-spaced vias per continuous line
+  const picked = [];
+  const step = Math.max(1, Math.floor(vias.length / 5));
+  for (let i = 0; i < vias.length && picked.length < 5; i += step) picked.push(vias[i]);
+  return { d, len: +len.toFixed(1), vias: picked };
 }
 
 function circuitTrace(s, { x = 4, y, w, cols = 96, t, animated = true, seed = 0 } = {}) {
   const pal = t.ink === '#f4f9ff' ? CIRCUIT_PAL.dark : CIRCUIT_PAL.light;
-  const isNarrow = cols < 90;
-  const segCells = isNarrow ? 18 : 20;
-  const gapCells = isNarrow ? 1 : 4;
-  const usedCols = 4 * segCells + 3 * gapCells;
-  const cw = w / cols;
-  const xPad = x + ((cols - usedCols) / 2) * cw;
+  const totalBytes = 12; // 96 bits divides 'Wow '(4), 'You '(4), 'Found '(6), 'Me '(3) cleanly end-to-end
+  const sx0 = x + 6;
+  const sx1 = x + w - 6;
   const stepH = 6, laneGap = 11.5;
 
   const baseG = [], animG = [], padsG = [];
   for (let lane = 0; lane < 4; lane++) {
     const yHi = y + lane * laneGap;
     const yLo = yHi + stepH;
-    for (let colSeg = 0; colSeg < 4; colSeg++) {
-      const idx = lane * 4 + colSeg;
-      const byteVal = CIRCUIT_MSG[idx];
-      const h = (idx * 7 + lane * 13 + seed * 17) % 100;
-      const isCyan = (idx + lane + seed) % 3 === 0;
-      const cFam = pal.fam[isCyan ? 1 : 0];
-      const sx0 = xPad + colSeg * (segCells + gapCells) * cw + cw * 0.5;
-      const sx1 = sx0 + (segCells - 1) * cw;
-      const { d, len, via } = traceGeom(byteVal, sx0, sx1, yHi, yLo);
+    const cFam = pal.fam[(lane + seed) % 2];
+    const { d, len, vias } = laneTraceGeom(CIRCUIT_WORDS[lane], totalBytes, sx0, sx1, yHi, yLo);
 
-      baseG.push(`<path d="${d}" fill="none" stroke="${cFam.rest}" stroke-width="1.6" stroke-dasharray="5.5 2" stroke-linejoin="miter"/>`);
+    baseG.push(`<path d="${d}" fill="none" stroke="${cFam.rest}" stroke-width="1.6" stroke-dasharray="5.5 2" stroke-linejoin="miter"/>`);
 
-      if (animated) {
-        const dur = +(2.6 + (h % 9) * 0.24).toFixed(2);
-        const begin = -((idx * 0.43 + seed * 0.71) % dur).toFixed(2);
-        const wakeLen = 36, coreLen = 10;
-        const dashGap = Math.ceil(len + 80);
-        // smooth glowing wake + hot lead tip + solid square ■ packet head
+    if (animated) {
+      const wakeLen = 58, coreLen = 14;
+      const travel = len + wakeLen;
+      const frac = Math.min(0.96, +(len / travel).toFixed(4));
+      const fracOff = Math.min(0.99, +(frac + 0.015).toFixed(4));
+      const dashGap = Math.ceil(len + 120);
+      const dur = +(7.2 + ((lane * 3 + seed) % 4) * 0.75).toFixed(2);
+      const b1 = -(((lane * 1.45 + seed * 0.9) % dur)).toFixed(2);
+      const b2 = (Number(b1) - dur / 2).toFixed(2);
+
+      // 2 staggered packets per line, with head locked cleanly at dash leading edge
+      for (const begin of [b1, b2]) {
         animG.push(
           `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="2" stroke-dasharray="${wakeLen} ${dashGap}" stroke-linecap="square" stroke-linejoin="miter">`
-          + `<animate attributeName="stroke-dashoffset" values="${wakeLen};-${dashGap - 20}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="${coreLen} ${dashGap + 30}" stroke-linecap="square" stroke-linejoin="miter">`
-          + `<animate attributeName="stroke-dashoffset" values="${coreLen};-${dashGap + 20}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<rect x="-2.8" y="-2.8" width="5.6" height="5.6" rx="0.6" fill="${cFam.peak}"><animateMotion path="${d}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></rect>`
+          + `<animate attributeName="stroke-dashoffset" values="${wakeLen};-${len.toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
+          + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="${coreLen} ${dashGap + wakeLen}" stroke-linecap="square" stroke-linejoin="miter">`
+          + `<animate attributeName="stroke-dashoffset" values="${coreLen};-${(len + wakeLen - coreLen).toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
+          + `<rect x="-2.8" y="-2.8" width="5.6" height="5.6" rx="0.6" fill="${cFam.peak}">`
+          + `<animateMotion path="${d}" keyPoints="0;1;1" keyTimes="0;${frac};1" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/>`
+          + `<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;${frac};${fracOff};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></rect>`
         );
+      }
 
-        const travelFrac = +(len / (wakeLen + dashGap - 20)).toFixed(3);
-        const pFlash = (u) => {
-          const k0 = Math.max(0.01, +(u - 0.04).toFixed(3));
-          const k1 = Math.min(0.98, +(u + 0.07).toFixed(3));
-          return `<animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${k0};${k1};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/>`;
-        };
-        padsG.push(
-          `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.11;1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></circle>`,
-          `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}">${pFlash(Math.min(0.88, travelFrac * 0.92))}</circle>`
-        );
-        if (via) {
-          const vt = Math.min(0.85, Math.max(0.08, (via.t / len) * travelFrac));
-          padsG.push(`<circle cx="${via.x.toFixed(1)}" cy="${via.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"><animate attributeName="stroke" values="${pal.via};${cFam.core};${pal.via};${pal.via}" keyTimes="0;${+(vt).toFixed(3)};${+(vt + 0.09).toFixed(3)};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></circle>`);
-        }
-      } else {
-        // reduced-motion static packet snapshot on alternating traces
-        if ((idx + seed) % 3 === 0) {
-          const offset = -(len * (0.28 + ((idx * 17) % 50) / 100));
-          animG.push(
-            `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="2" stroke-dasharray="32 ${Math.ceil(len + 60)}" stroke-dashoffset="${offset.toFixed(1)}"/>`
-            + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="9 ${Math.ceil(len + 60)}" stroke-dashoffset="${offset.toFixed(1)}"/>`
-          );
-        }
-        padsG.push(
-          `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`,
-          `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`
-        );
-        if (via) {
-          padsG.push(`<circle cx="${via.x.toFixed(1)}" cy="${via.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"/>`);
-        }
+      // end-cap pads & vias flash twice per dur cycle (synced to both packets via half-period dur/2)
+      const hDur = +(dur / 2).toFixed(2);
+      const kHalf = u => +((((u % 0.5) + 0.5) % 0.5) * 2).toFixed(3);
+      const kEnd = Math.max(0.05, Math.min(0.92, kHalf(frac)));
+      padsG.push(
+        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.14;1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`,
+        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"><animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${+(kEnd - 0.04).toFixed(3)};${Math.min(0.99, +(kEnd + 0.08).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`
+      );
+      for (const v of vias) {
+        const vt = Math.max(0.05, Math.min(0.90, kHalf((v.len / len) * frac)));
+        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"><animate attributeName="stroke" values="${pal.via};${cFam.core};${pal.via};${pal.via}" keyTimes="0;${vt};${Math.min(0.98, +(vt + 0.1).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`);
+      }
+    } else {
+      // reduced-motion static snapshot: freeze 1 mid-flight pulse per lane
+      const off = -(len * (0.22 + ((lane + seed) % 4) * 0.16));
+      animG.push(
+        `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="2" stroke-dasharray="52 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
+        + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="2.4" stroke-dasharray="14 ${Math.ceil(len + 80)}" stroke-dashoffset="${off.toFixed(1)}"/>`
+      );
+      padsG.push(
+        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`,
+        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="2.8" fill="${pal.pad}"/>`
+      );
+      for (const v of vias) {
+        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="2.2" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"/>`);
       }
     }
   }
