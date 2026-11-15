@@ -193,7 +193,7 @@ function banner(profile, { animated = true, narrow = false } = {}) {
       parts.push(`<circle cx="${mx}" cy="${my}" r="${mr}" fill="#9dccff" opacity="0"><animateTransform attributeName="transform" type="translate" values="0 10;0 -26" dur="${mdur}s" begin="-${mbg}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.75;0" dur="${mdur}s" begin="-${mbg}s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></circle>`);
     }
   }
-  const glow = `<ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .52}" ry="${P.h * .50}" fill="#040b18" opacity=".42"/><ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .58}" ry="${P.h * .55}" fill="url(#glow)">`
+  const glow = `<ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .55}" ry="${P.h * .54}" fill="#030916" opacity=".54"/><ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .58}" ry="${P.h * .55}" fill="url(#glow)">`
     + (animated ? '<animate attributeName="opacity" values=".65;1;.65" dur="4.6s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></ellipse>' : '</ellipse>');
   parts.push(glow);
   if (animated) {
@@ -309,8 +309,12 @@ function banner(profile, { animated = true, narrow = false } = {}) {
     parts.push(`<g>${solid}<animateTransform attributeName="transform" type="translate" values="0 0;0 0;2 0;-2 0;0 0" keyTimes="0;.91;.93;.96;1" calcMode="discrete" dur="7s" repeatCount="indefinite"/></g>`);
     parts.push(ghost(6, '#4a92ff', hy - 38, 6), ghost(-5, '#9dccff', hy - 16, 5));
   } else parts.push(solid);
-  parts.push(`<path d="M${L + 3} ${hy + 20}h${narrow ? 240 : 340}" stroke="url(#accentLine)" stroke-opacity=".7"/>`);
-  parts.push(`<path d="M${L + 3} ${hy + 26}v8m20-8v5m20-5v5" stroke="#6ba9ff" stroke-opacity=".55"/>`);
+  const accW = narrow ? 240 : 340;
+  parts.push(`<path d="M${L + 3} ${hy + 20}h${accW}" stroke="url(#accentLine)" stroke-opacity=".7"/>`);
+  if (animated) {
+    parts.push(`<path d="M${L + 3} ${hy + 20}h${accW}" stroke="#9dccff" stroke-width="1.5" stroke-dasharray="38 ${accW + 40}" stroke-linecap="round"><animate attributeName="stroke-dashoffset" values="38;-${accW}" dur="4.2s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.85;.85;0" keyTimes="0;.15;.8;1" dur="4.2s" repeatCount="indefinite"/></path>`);
+  }
+  parts.push(`<path d="M${L + 3} ${hy + 26}v8m20-8v5m20-5v5" stroke="#6ba9ff" stroke-opacity=".55">${animated ? '<animate attributeName="stroke-opacity" values=".3;.9;.3" dur="3.4s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></path>' : '</path>'}`);
   const roleY = hy + (narrow ? 56 : 58);
   const roleSize = narrow ? 10.5 : 13;
   parts.push(s.text(profile.role, L, roleY, roleSize, { face: 'mono', fill: t.mute, spacing: narrow ? .5 : 1.25 }));
@@ -431,7 +435,7 @@ function laneTraceGeom(word, totalBytes, x0, x1, yHi, yLo) {
   return { d, len: +len.toFixed(1), vias: picked };
 }
 
-function circuitTrace(s, { x = 4, y, w, cols = 96, t, animated = true, seed = 0 } = {}) {
+function circuitTrace(s, { x = 4, y, w, cols = 96, lanes = 4, words = CIRCUIT_WORDS, t, animated = true, seed = 0 } = {}) {
   const pal = t.ink === '#f4f9ff' ? CIRCUIT_PAL.dark : CIRCUIT_PAL.light;
   const totalBytes = 12; // 96 bits divides 'Wow '(4), 'You '(4), 'Found '(6), 'Me '(3) cleanly end-to-end
   const sx0 = x + 6;
@@ -439,11 +443,11 @@ function circuitTrace(s, { x = 4, y, w, cols = 96, t, animated = true, seed = 0 
   const stepH = 6, laneGap = 11.5;
 
   const baseG = [], animG = [], padsG = [];
-  for (let lane = 0; lane < 4; lane++) {
+  for (let lane = 0; lane < lanes; lane++) {
     const yHi = y + lane * laneGap;
     const yLo = yHi + stepH;
     const cFam = pal.fam[(lane + seed) % 2];
-    const { d, len, vias } = laneTraceGeom(CIRCUIT_WORDS[lane], totalBytes, sx0, sx1, yHi, yLo);
+    const { d, len, vias } = laneTraceGeom(words[lane % words.length], totalBytes, sx0, sx1, yHi, yLo);
 
     baseG.push(`<path d="${d}" fill="none" stroke="${cFam.rest}" stroke-width="1.6" stroke-dasharray="5.5 2" stroke-linejoin="miter"/>`);
 
@@ -504,8 +508,8 @@ function circuitTrace(s, { x = 4, y, w, cols = 96, t, animated = true, seed = 0 
 // ---------------------------------------------------------------- section header (transparent, themed)
 const SECTION_SEED = { '01': 0, '02': 1, '03': 2, '04': 3 };
 function header(sec, t, { animated = true, narrow = false } = {}) {
-  const yCircuit = narrow ? 124 : 132;
-  const W = narrow ? 600 : 1000, H = yCircuit + 48;
+  const yCircuit = narrow ? 120 : 128;
+  const W = narrow ? 600 : 1000, H = yCircuit + 26;
   const s = new SVG(W, H, `${sec.num} / ${sec.kicker}: ${sec.title}`, sec.sub);
   const p = [];
   const kSize = narrow ? 13.5 : 13;
@@ -525,7 +529,9 @@ function header(sec, t, { animated = true, narrow = false } = {}) {
     p.push(headerPicto(sec.icon, 553, 27, 28, NIGHT.ink, animated));
   }
 
-  p.push(circuitTrace(s, { x: 4, y: yCircuit, w: W - 8, cols: narrow ? 76 : 96, t, animated, seed: SECTION_SEED[sec.num] ?? 0 }));
+  const seed = SECTION_SEED[sec.num] ?? 0;
+  const hWords = seed % 2 === 0 ? ['Wow ', 'You '] : ['Found ', 'Me '];
+  p.push(circuitTrace(s, { x: 4, y: yCircuit, w: W - 8, cols: narrow ? 76 : 96, lanes: 2, words: hWords, t, animated, seed }));
   s.add(...p);
   return s.finish();
 }
@@ -598,7 +604,7 @@ function cardShell(s, w, h, id, pad = 0, animated = false) {
   };
 }
 // terminal strip with a typed command: `prefix` is drawn dim, `cmd` types on loop
-function strip(s, { x = 0, y, w, h = 28, prefix = '$', cmd, right = '', animated, id, dur = 7 }) {
+function strip(s, { x = 0, y, w, h = 28, prefix = '$', cmd, right = '', animated, id, dur = 7, begin = 0 }) {
   const t = NIGHT, size = 11.5, base = y + h / 2 + 4;
   const out = [`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${t.strip}"/>`];
   const px = x + 16;
@@ -607,7 +613,7 @@ function strip(s, { x = 0, y, w, h = 28, prefix = '$', cmd, right = '', animated
   const cw = s.measure(cmd, size, 'mono');
   const art = s.text(cmd, cx, base, size, { face: 'mono', fill: t.ink });
   if (animated) {
-    const ty = typing(id, cx, y, h, cw, cmd.length, { dur });
+    const ty = typing(id, cx, y, h, cw, cmd.length, { dur, begin });
     out.push(ty.clip, `<g clip-path="url(#${id})">${art}</g>`, ty.caret(0, y + h / 2 - 7, 7, 14, t.pale));
   } else out.push(art, `<rect x="${cx + cw + 3}" y="${y + h / 2 - 7}" width="7" height="14" fill="${t.pale}"/>`);
   if (right) out.push(right);
@@ -628,7 +634,7 @@ function projectLines(p) {
   const s = new SVG(1, 1, '');
   return s.wrap(p.text, 11.5, CW - 36, 'body');
 }
-function projectCard(p, { animated = true, lines = 3 } = {}) {
+function projectCard(p, { animated = true, lines = 3, begin = 0 } = {}) {
   const t = NIGHT, W = CW + CPAD * 2;
   const innerH = 92 + Math.max(0, lines - 1) * 18 + 24 + 30;
   const H = innerH + CPAD * 2;
@@ -645,7 +651,7 @@ function projectCard(p, { animated = true, lines = 3 } = {}) {
   o.push(pill(s, 'repo', ox + CW - 16, oy + 16, { animated }));
   const desc = s.wrap(p.text, 11.5, CW - 36, 'body');
   o.push(`<g>${desc.map((l, i) => s.text(l, ox + 18, oy + 92 + i * 18, 11.5, { face: 'body', fill: t.mute })).join('')}${fade(2)}</g>`);
-  o.push(strip(s, { x: ox, y: oy + innerH - 30, w: CW, h: 30, cmd: p.stack.join('  '), animated, id: 'ty', dur: 7 }));
+  o.push(strip(s, { x: ox, y: oy + innerH - 30, w: CW, h: 30, cmd: p.stack.join('  '), animated, id: 'ty', dur: 7, begin }));
   o.push(sh.close);
   s.add(...o);
   return s.finish();
@@ -976,14 +982,103 @@ function metricsBanner(rawSvg, { animated = true } = {}) {
   return s.finish();
 }
 
+function metricsBannerNarrow(stats, { animated = true } = {}) {
+  const t = NIGHT, gh = stats.github, lc = stats.leetcode;
+  const W = 600, topH = 30, padX = 28, iw = W - padX * 2, H = 642;
+  const s = new SVG(W, H, `GitHub and LeetCode metrics: ${gh.total} contributions, ${lc.solved} LeetCode solved`,
+    `${gh.total} contributions in 12 months, ${gh.repos} public repositories, ${lc.solved} LeetCode problems solved.`);
+  s.def('<pattern id="mgrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#6ba9ff" stroke-opacity=".06"/></pattern>');
+  const sh = cardShell(s, W, H, 'mn', 0, animated);
+  const o = [sh.open];
+  o.push(`<rect x="0" y="${topH}" width="${W}" height="${H - topH}" fill="url(#mgrid)"/>`);
+  const mPill = livePill(s, 'daily sync', animated, W, topH);
+  o.push(strip(s, { y: 0, w: W, h: topH, prefix: '>', cmd: 'lowlighter/metrics --live', right: mPill, animated, id: 'mnty', dur: 8 }));
+
+  // 1) GitHub contributions + 31-week mobile-readable heatmap
+  o.push(s.text('GITHUB CONTRIBUTIONS', padX, 64, 10, { face: 'mono', fill: '#9bc0ff', spacing: 1.8 }));
+  const ghStr = String(gh.total);
+  o.push(s.text(ghStr, padX, 104, 34, { face: 'display', fill: t.ink }));
+  o.push(s.text('in the last 12 months', padX + 10 + s.measure(ghStr, 34, 'display'), 104, 13, { face: 'body', fill: t.mute }));
+  o.push(s.text(`${gh.week} this week · streak ${gh.streak.current}d · best ${gh.streak.best}d`, padX, 126, 11.5, { face: 'mono', fill: t.dim }));
+
+  const days = gh.days;
+  const weeks = 31, cell = 13, gap = 4, hx0 = padX + Math.round((iw - (weeks * cell + (weeks - 1) * gap)) / 2), hy0 = 144;
+  const lastDow = new Date(days[days.length - 1][0] + 'T00:00:00Z').getUTCDay();
+  const recent = days.slice(-((weeks - 1) * 7 + lastDow + 1));
+  const maxD = Math.max(1, ...recent.map(d => d[1]));
+  recent.forEach(([, c], i) => {
+    const col = Math.floor(i / 7), row = i % 7;
+    const cx = hx0 + col * (cell + gap), cy = hy0 + row * (cell + gap);
+    const lvl = c === 0 ? 0 : Math.min(4, Math.ceil((c / maxD) * 4));
+    const anim = animated ? `<animate attributeName="opacity" values="0;1" dur=".3s" begin="${(0.18 + col * 0.03).toFixed(2)}s" fill="freeze"/>` : '';
+    o.push(`<rect x="${cx}" y="${cy}" width="${cell}" height="${cell}" rx="2.5" fill="${RAMP[lvl]}">${anim}</rect>`);
+    if (i === recent.length - 1) {
+      o.push(`<rect x="${cx - 1.5}" y="${cy - 1.5}" width="${cell + 3}" height="${cell + 3}" rx="3.2" fill="none" stroke="${t.ink}" stroke-width="1.3">${animated ? '<animate attributeName="opacity" values="1;.25;1" dur="1.6s" repeatCount="indefinite"/>' : ''}</rect>`);
+    }
+  });
+
+  // 2) Languages bar + 2x3 grid
+  o.push(`<path d="M${padX} 280H${W - padX}" stroke="${t.line}"/>`);
+  o.push(s.text(`MOST USED LANGUAGES · ${gh.repos} REPOS · ${gh.stars} STARS`, padX, 306, 10, { face: 'mono', fill: '#9bc0ff', spacing: 1.6 }));
+  const top = gh.languages.slice(0, 6);
+  const rest = Math.max(0, 100 - top.reduce((a, l) => a + l.share, 0));
+  const shades = ['#9dccff', '#6ba9ff', '#4a92ff', '#2f74e0', '#1f5bbf', '#173d72'];
+  s.def(`<clipPath id="mnbar"><rect x="${padX}" y="320" width="${iw}" height="12" rx="6"/></clipPath>`);
+  let lx = padX;
+  const barSegs = top.map((l, i) => {
+    const bw = iw * l.share / 100;
+    const seg = `<rect x="${lx.toFixed(1)}" y="320" width="${(bw + .5).toFixed(1)}" height="12" fill="${shades[i]}"/>`;
+    lx += bw;
+    return seg;
+  });
+  if (rest > 0) barSegs.push(`<rect x="${lx.toFixed(1)}" y="320" width="${(padX + iw - lx).toFixed(1)}" height="12" fill="${t.raise}"/>`);
+  const barGrow = animated ? `<animateTransform attributeName="transform" type="scale" values="0 1;1 1" dur=".9s" begin=".25s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".2 .7 .2 1"/>` : '';
+  o.push(`<g clip-path="url(#mnbar)"><g transform="translate(${padX} 0)"><g>${barGrow}<g transform="translate(-${padX} 0)">${barSegs.join('')}</g></g></g></g>`);
+
+  top.forEach((l, i) => {
+    const col = i % 2, row = Math.floor(i / 2);
+    const ix = padX + col * 280, iy = 360 + row * 28;
+    o.push(`<rect x="${ix}" y="${iy - 10}" width="10" height="10" rx="2.5" fill="${shades[i]}"/>`);
+    o.push(s.text(l.name, ix + 18, iy, 13, { face: 'body', fill: t.ink }));
+    o.push(s.text(`${l.share.toFixed(1)}%`, ix + 258, iy, 12, { face: 'mono', fill: t.dim, anchor: 'end' }));
+  });
+
+  // 3) LeetCode progress
+  o.push(`<path d="M${padX} 446H${W - padX}" stroke="${t.line}"/>`);
+  o.push(s.text('LEETCODE PROGRESS', padX, 472, 10, { face: 'mono', fill: '#9bc0ff', spacing: 1.8 }));
+  const lcStr = String(lc.solved);
+  o.push(s.text(lcStr, padX, 510, 34, { face: 'display', fill: t.ink }));
+  o.push(s.text('solved', padX + 10 + s.measure(lcStr, 34, 'display'), 510, 13, { face: 'body', fill: t.mute }));
+  if (lc.latest?.title) {
+    let lt = `latest · ${lc.latest.title}`;
+    while (s.measure(lt, 11.5, 'mono') > 280 && lt.length > 10) lt = lt.slice(0, -2).trimEnd() + '…';
+    o.push(s.text(lt, W - padX, 510, 11.5, { face: 'mono', fill: t.dim, anchor: 'end' }));
+  }
+  const lcRows = [['Easy', lc.easy, t.easy], ['Medium', lc.medium, t.medium], ['Hard', lc.hard, t.hard]];
+  const lcMax = Math.max(1, lc.easy, lc.medium, lc.hard);
+  lcRows.forEach(([label, n, color], i) => {
+    const ry = 542 + i * 28, bx = padX + 76, bw = iw - 122;
+    o.push(s.text(label, padX, ry + 4, 12.5, { face: 'mono', fill: color }));
+    o.push(`<rect x="${bx}" y="${ry - 4}" width="${bw}" height="8" rx="4" fill="${t.raise}"/>`);
+    const rw = Math.max(n ? 8 : 0, (bw * n) / lcMax);
+    o.push(`<rect x="${bx}" y="${ry - 4}" width="${rw.toFixed(1)}" height="8" rx="4" fill="${color}">${animated ? `<animate attributeName="width" values="0;${rw.toFixed(1)}" dur=".85s" begin="${(0.25 + i * 0.14).toFixed(2)}s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines=".2 .7 .2 1"/>` : ''}</rect>`);
+    o.push(s.text(String(n), W - padX, ry + 4, 12.5, { face: 'monoBold', fill: t.ink, anchor: 'end' }));
+  });
+
+  o.push(brackets(14, topH + 14, W - 28, H - topH - 28, 18, '#6ba9ff', .32, animated));
+  o.push(sh.close);
+  s.add(...o);
+  return s.finish();
+}
+
 // ---------------------------------------------------------------- contact card (380 inner + 6px gutter = 392)
-function contactCard(c, { animated = true } = {}) {
+function contactCard(c, { animated = true, begin = 0 } = {}) {
   const t = NIGHT, innerH = 104, W = CW + CPAD * 2, H = innerH + CPAD * 2;
   const ox = CPAD, oy = CPAD;
   const s = new SVG(W, H, `${c.label}: ${c.value}`);
   const sh = cardShell(s, W, H, 'c', CPAD, animated);
   const o = [sh.open];
-  o.push(strip(s, { x: ox, y: oy, w: CW, h: 30, cmd: c.cmd, animated, id: 'ty', dur: 7 }));
+  o.push(strip(s, { x: ox, y: oy, w: CW, h: 30, cmd: c.cmd, animated, id: 'ty', dur: 7, begin }));
   o.push(`<rect x="${ox + 18}" y="${oy + 44}" width="44" height="44" rx="9" fill="${t.raise}" stroke="${t.edge}" stroke-opacity=".3"/>`);
   const glyph = c.icon
     ? drawIcon(icon(c.icon), ox + 30, oy + 56, 20, t.pale)
@@ -1015,4 +1110,104 @@ function footer(profile, updated, t, { animated = true, narrow = false } = {}) {
   return s.finish();
 }
 
-module.exports = { banner, header, intro, projectCard, projectLines, stackBanner, contributionsCard, leetcodeCard, languagesCard, metricsBanner, contactCard, footer, CW, CPAD, LW, LH };
+// ---------------------------------------------------------------- bottom ASCII artwork (188x64, density-locked char randomization)
+let _asciiCache = null;
+function asciiArt({ animated = true } = {}) {
+  if (!_asciiCache) _asciiCache = JSON.parse(fs.readFileSync(path.join(ART, 'ascii-art.json'), 'utf8'));
+  const { columns: cols, rows, text, colors } = _asciiCache;
+  const W = 1000, padX = 14, padY = 14, aw = W - padX * 2, ah = 544, H = ah + padY * 2;
+  const s = new SVG(W, H, 'ASCII portrait artwork', 'Animated ASCII art portrait in midnight blues and highlights.');
+  s.def(`<clipPath id="aac"><rect width="${W}" height="${H}" rx="12"/></clipPath>`);
+  const parts = [`<g clip-path="url(#aac)"><rect width="${W}" height="${H}" rx="12" fill="#02050d"/>`];
+
+  const RAMP = ['.', '-', ':', ';', '=', '+', 's', 'S', 'x', '0', 'X', '8', '#', '@'];
+  const gMap = {};
+  let upm = 1000;
+  for (const ch of RAMP) {
+    const info = s.g.glyph(ch, 'mono');
+    gMap[ch] = info.id;
+    upm = info.upm;
+  }
+  const cellW = aw / cols, cellH = ah / rows, fSz = cellH * .98;
+  const sc = +(fSz / upm).toFixed(5);
+  const hash = (a, b, k) => {
+    let x = (Math.imul(a + 1, 374761393) + Math.imul(b + 1, 668265263) + Math.imul(k + 1, 1442695041)) >>> 0;
+    x = Math.imul(x ^ (x >>> 13), 1274126177) >>> 0;
+    return ((x ^ (x >>> 16)) >>> 0) / 4294967296;
+  };
+  const qHex = hex => {
+    const R = parseInt(hex.slice(1, 3), 16), G = parseInt(hex.slice(3, 5), 16), B = parseInt(hex.slice(5, 7), 16);
+    if (R + G + B < 10) return null;
+    return '#' + [R, G, B].map(v => Math.min(15, Math.round(v / 17)).toString(16)).join('');
+  };
+
+  if (!animated) {
+    const buckets = new Map();
+    for (let r = 0; r < rows; r++) {
+      const row = text[r];
+      for (let c = 0; c < cols; c++) {
+        const ch = row[c];
+        if (!gMap[ch]) continue;
+        const fill = qHex(colors[r][c]);
+        if (!fill) continue;
+        if (!buckets.has(fill)) buckets.set(fill, []);
+        const gx = Math.round((c * cellW) / sc), gy = Math.round(((r + 0.80) * cellH) / sc);
+        buckets.get(fill).push(`<use href="#${gMap[ch]}" x="${gx}" y="${gy}"/>`);
+      }
+    }
+    const layers = [...buckets].map(([fill, items]) => `<g fill="${fill}">${items.join('')}</g>`).join('');
+    parts.push(`<g transform="translate(${padX} ${padY}) scale(${sc})">${layers}</g>`);
+  } else {
+    const G = 8, S = 3;
+    const DURS = [0.91, 1.07, 1.23, 1.39, 1.57, 1.73, 1.91, 2.09];
+    const kt = Array.from({ length: S }, (_, i) => +(i / S).toFixed(3)).join(';');
+    const grouped = Array.from({ length: G }, () => []);
+
+    for (let r = 0; r < rows; r++) {
+      const row = text[r];
+      for (let c = 0; c < cols; c++) {
+        const ch = row[c];
+        const idx = RAMP.indexOf(ch);
+        if (idx < 0) continue;
+        const fill = qHex(colors[r][c]);
+        if (!fill) continue;
+        const lo = Math.max(0, Math.min(RAMP.length - 4, idx - 1));
+        const pool = RAMP.slice(lo, lo + 4);
+        const rem = [0, 1, 2, 3];
+        const s0 = rem.splice(Math.floor(hash(c, r, 11) * 4), 1)[0];
+        const s1 = rem.splice(Math.floor(hash(c, r, 23) * 3), 1)[0];
+        const s2 = rem[Math.floor(hash(c, r, 37) * 2)];
+        const chars = [pool[s0], pool[s1], pool[s2]];
+        const gx = Math.round((c * cellW) / sc), gy = Math.round(((r + 0.80) * cellH) / sc);
+        const g = Math.floor(hash(c, r, 91) * G);
+        grouped[g].push({ gx, gy, fill, chars });
+      }
+    }
+
+    const out = [];
+    for (let g = 0; g < G; g++) {
+      const dur = `${DURS[g]}s`;
+      const begin = `-${+((g * 0.23) % DURS[g]).toFixed(2)}s`;
+      for (let st = 0; st < S; st++) {
+        const buckets = new Map();
+        for (const cell of grouped[g]) {
+          const gid = gMap[cell.chars[st]];
+          if (!gid) continue;
+          if (!buckets.has(cell.fill)) buckets.set(cell.fill, []);
+          buckets.get(cell.fill).push(`<use href="#${gid}" x="${cell.gx}" y="${cell.gy}"/>`);
+        }
+        const vis = Array.from({ length: S }, (_, i) => (i === st ? 'visible' : 'hidden')).join(';');
+        const layers = [...buckets].map(([fill, items]) => `<g fill="${fill}">${items.join('')}</g>`).join('');
+        out.push(`<g visibility="${st === 0 ? 'visible' : 'hidden'}">${layers}<animate attributeName="visibility" values="${vis}" keyTimes="${kt}" calcMode="discrete" dur="${dur}" begin="${begin}" repeatCount="indefinite"/></g>`);
+      }
+    }
+    parts.push(`<g transform="translate(${padX} ${padY}) scale(${sc})">${out.join('')}</g>`);
+  }
+
+  parts.push(brackets(8, 8, W - 16, H - 16, 14, '#6ba9ff', .28, animated));
+  parts.push(`</g><rect width="${W}" height="${H}" rx="12" fill="none" stroke="${NIGHT.line}"/>`);
+  s.add(...parts);
+  return s.finish();
+}
+
+module.exports = { banner, header, intro, projectCard, projectLines, stackBanner, contributionsCard, leetcodeCard, languagesCard, metricsBanner, metricsBannerNarrow, contactCard, footer, asciiArt, CW, CPAD, LW, LH };

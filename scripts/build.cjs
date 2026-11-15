@@ -49,20 +49,22 @@ for (const [id, sec] of Object.entries(sections)) {
 }
 
 const lines = Math.max(...projects.map(p => A.projectLines(p).length));
-for (const p of projects) both(`projects/${p.slug}`, a => A.projectCard(p, { animated: a, lines }));
+projects.forEach((p, i) => both(`projects/${p.slug}`, a => A.projectCard(p, { animated: a, lines, begin: +(-(i * 1.7)).toFixed(2) })));
 
 both('stack-banner', a => A.stackBanner(stack, { animated: a }));
 both('stack-banner-narrow', a => A.stackBanner(stack, { animated: a, narrow: true }));
 
 both('metrics-banner', a => A.metricsBanner(rawMetrics, { animated: a }));
+both('metrics-banner-narrow', a => A.metricsBannerNarrow(stats, { animated: a }));
 
-for (const c of contacts) both(`contact/${c.id}`, a => A.contactCard(c, { animated: a }));
+contacts.forEach((c, i) => both(`contact/${c.id}`, a => A.contactCard(c, { animated: a, begin: +(-(i * 1.55)).toFixed(2) })));
 for (const [mode, t] of [['dark', NIGHT], ['light', LIGHT]]) {
   write(`footer-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: true }));
   write(`footer-still-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: false }));
   write(`footer-narrow-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: true, narrow: true }));
   write(`footer-narrow-still-${mode}.svg`, A.footer(profile, stats.updated, t, { animated: false, narrow: true }));
 }
+both('ascii-art', a => A.asciiArt({ animated: a }));
 
 // ---- README
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -105,7 +107,7 @@ out.push(`<a href="${profile.portfolio}#home"><picture>${src(`${NW} and ${RM}`, 
 out.push(`<p><a href="${profile.portfolio}#about">${themed('intro', `${profile.focus} Status: ${profile.chips.join(', ')}.`, 'width="100%"', { still: true, narrow: true })}</a></p>`);
 
 out.push(h3('metrics', sections.metrics, `${gh}?tab=overview`));
-out.push(`<a href="${gh}">${motion('metrics-banner', "Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories", 'width="100%"')}</a>`);
+out.push(`<a href="${gh}"><picture>${src(`${NW} and ${RM}`, 'metrics-banner-narrow-still.svg')}${src(NW, 'metrics-banner-narrow.svg')}${src(RM, 'metrics-banner-still.svg')}<img src="assets/metrics-banner.svg${v('metrics-banner.svg')}" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories" width="100%"></picture></a>`);
 
 const cardW = A.CW + A.CPAD * 2;
 const grid2 = items => `<p align="center">\n${items.slice(0, 2).join('\n')}<br>\n${items.slice(2).join('\n')}\n</p>`;
@@ -120,6 +122,7 @@ out.push(`<a href="${profile.portfolio}#skills"><picture>${src(`${NW} and ${RM}`
 out.push(h3('contact', sections.contact, contacts[0].href));
 out.push(grid2(contacts.map(c => `<a href="${c.href}">${motion(`contact/${c.id}`, `${c.label}: ${c.value}`, `width="${cardW}"`)}</a>`)));
 out.push(`<p><a href="${gh}/${profile.github}">${themed('footer', profile.footer, 'width="100%"', { still: true, narrow: true })}</a></p>`);
+out.push(`<p>${motion('ascii-art', 'Animated ASCII art portrait at the bottom of the profile', 'width="100%"')}</p>`);
 
 fs.writeFileSync(path.join(ROOT, 'README.md'), out.join('\n\n') + '\n');
 const total = Object.keys(hashes).length;
