@@ -65,6 +65,13 @@ class Glyphs {
     return `<g transform="translate(${r(x)} ${r(y)}) scale(${+s.toFixed(5)})" ${paint} ${attrs}>${uses.join('')}</g>`;
   }
 
+  glyph(ch, face = 'mono') {
+    const f = font(face), upm = f.unitsPerEm, g = f.charToGlyph(ch);
+    const id = `${face[0]}${face.length}${g.index}`;
+    if (!this.defs.has(id)) this.defs.set(id, g.getPath(0, 0, upm).toPathData(0));
+    return { id: this.defs.get(id) ? id : '', upm, advance: g.advanceWidth };
+  }
+
   // greedy word wrap into lines that fit maxWidth
   wrap(text, size, maxWidth, face = 'body', spacing = 0) {
     const words = text.split(/\s+/);
