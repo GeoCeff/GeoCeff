@@ -111,7 +111,7 @@ out.push(`<a href="${profile.portfolio}#home"><picture>${src(`${NW} and ${RM}`, 
 out.push(`<p><a href="${profile.portfolio}#about">${themed('intro', `${profile.focus} Status: ${profile.chips.join(', ')}.`, 'width="100%"', { still: true, narrow: true })}</a></p>`);
 
 out.push(h3('metrics', sections.metrics, `${gh}?tab=overview`));
-out.push(`<a href="${gh}"><picture>${src(`${NW} and ${RM}`, 'metrics-banner-narrow-still.svg')}${src(NW, 'metrics-banner-narrow.svg')}${src(RM, 'metrics-banner-still.svg')}<img src="assets/metrics-banner.svg${v('metrics-banner.svg')}" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and featured repositories" width="100%"></picture></a>`);
+out.push(`<a href="${gh}"><picture>${src(`${NW} and ${RM}`, 'metrics-banner-narrow-still.svg')}${src(NW, 'metrics-banner-narrow.svg')}${src(RM, 'metrics-banner-still.svg')}<img src="assets/metrics-banner.svg${v('metrics-banner.svg')}" alt="Geo's GitHub activity, contribution calendar, languages, LeetCode statistics, and repository summary" width="100%"></picture></a>`);
 
 const cardW = A.CW + A.CPAD * 2;
 const grid2 = items => `<p align="center">\n${items.slice(0, 2).join('\n')}<br>\n${items.slice(2).join('\n')}\n</p>`;

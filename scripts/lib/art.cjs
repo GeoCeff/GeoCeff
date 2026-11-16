@@ -193,7 +193,7 @@ function banner(profile, { animated = true, narrow = false } = {}) {
       parts.push(`<circle cx="${mx}" cy="${my}" r="${mr}" fill="#9dccff" opacity="0"><animateTransform attributeName="transform" type="translate" values="0 10;0 -26" dur="${mdur}s" begin="-${mbg}s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;.75;0" dur="${mdur}s" begin="-${mbg}s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></circle>`);
     }
   }
-  const glow = `<ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .55}" ry="${P.h * .54}" fill="#030916" opacity=".54"/><ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .58}" ry="${P.h * .55}" fill="url(#glow)">`
+  const glow = `<ellipse cx="${P.x + P.w / 2}" cy="${P.y + P.h / 2}" rx="${P.w * .58}" ry="${P.h * .55}" fill="url(#glow)">`
     + (animated ? '<animate attributeName="opacity" values=".65;1;.65" dur="4.6s" calcMode="spline" keyTimes="0;.5;1" keySplines=".45 0 .55 1;.45 0 .55 1" repeatCount="indefinite"/></ellipse>' : '</ellipse>');
   parts.push(glow);
   if (animated) {
@@ -365,30 +365,32 @@ function banner(profile, { animated = true, narrow = false } = {}) {
 
 // ---------------------------------------------------------------- morse circuit-trace timing divider
 // 4 continuous channels per divider; all 7 dividers (28 channels) transmit NIKI - "La La Lost You"
-// in International Morse Code (dot = 1u HIGH, dash = 3u HIGH, 3u letter gap, 6u word gap w/ via dot).
-const LALA_LYRICS = [
-  "While I'm on Sunset, are you on the subway?",
-  "While I drive, are you gettin' on the L-train?",
-  "I mean, Manhattan's nice, but so are Malibu nights",
-  "You would know if you stayed, you would know if you put up a fight",
-  "Your toes turn blue in winter, I'm gettin' red, rum",
-  "Does the trick for all of the things left unsaid, I'm",
-  "Missin' our drunken 2 A.M. strolls in K-Town",
-  "Now you're chasing fake highs in the Upper West Side",
-  "And fuckin' on Brooklyns in Brooklyn",
-  "Your Chelseas in Chelsea",
-  "Hope that eases the pain, so you remember to miss me",
-  "And you sold your car, now you walk for miles",
-  "Bet your feet feel numb",
-  "(Crosswalks in my mind are shaky, so please hold on tight)",
-  "All my demons run wild",
-  "All my demons have your smile",
-  "In the city of angels, in the city of angels",
-  "Hope New York holds you",
-  "Hope it holds you like I do",
-  "While my demons stay faithful",
-  "In the city of angels",
+// in standard ITU Morse Code (1u dot, 3u dash, 1u symbol gap, 3u letter gap, 7u word gap),
+// with cursor packet speed keyed word-by-word to the song's vocal phrasing (100 BPM @ 0.5x = 1.2s/beat).
+const TIMED_LYRICS = [
+  "While:0.5 I'm:0.4 on:0.4 Sunset,:1.6 are:0.5 you:0.5 on:0.4 the:0.4 subway?:2.2",
+  "While:0.5 I:0.4 drive,:1.4 are:0.5 you:0.5 gettin':0.7 on:0.4 the:0.4 L-train?:2.3",
+  "I:0.5 mean,:1.0 Manhattan's:1.2 nice,:1.5 but:0.4 so:0.6 are:0.5 Malibu:1.3 nights:2.4",
+  "You:0.5 would:0.4 know:0.7 if:0.4 you:0.5 stayed,:1.6 you:0.5 would:0.4 know:0.7 if:0.4 you:0.4 put:0.5 up:0.4 a:0.3 fight:2.5",
+  "Your:0.5 toes:0.7 turn:0.6 blue:0.8 in:0.4 winter,:1.4 I'm:0.6 gettin':0.7 red,:1.3 rum:1.9",
+  "Does:0.6 the:0.4 trick:0.8 for:0.4 all:0.6 of:0.3 the:0.3 things:0.7 left:0.6 unsaid,:1.6 I'm:1.1",
+  "Missin':0.9 our:0.5 drunken:0.9 2:0.7 A.M.:1.1 strolls:0.9 in:0.4 K-Town:2.2",
+  "Now:0.6 you're:0.5 chasing:0.9 fake:0.8 highs:0.9 in:0.4 the:0.4 Upper:0.8 West:0.8 Side:2.2",
+  "And:0.5 fuckin':0.9 on:0.5 Brooklyns:1.2 in:0.5 Brooklyn:2.1",
+  "Your:0.6 Chelseas:1.2 in:0.6 Chelsea:2.3",
+  "Hope:0.7 that:0.5 eases:1.0 the:0.4 pain,:1.5 so:0.6 you:0.5 remember:1.2 to:0.5 miss:0.9 me:2.4",
+  "And:0.4 you:0.4 sold:0.7 your:0.5 car,:1.3 now:0.5 you:0.5 walk:0.8 for:0.5 miles:2.2",
+  "Bet:0.9 your:0.8 feet:1.2 feel:1.4 numb:3.0",
+  "(Crosswalks:1.3 in:0.6 my:0.6 mind:1.0 are:0.6 shaky,:1.7 so:0.7 please:0.9 hold:1.0 on:0.7 tight):2.6",
+  "All:1.0 my:0.8 demons:1.4 run:1.2 wild:2.9",
+  "All:1.0 my:0.8 demons:1.4 have:0.9 your:0.8 smile:3.1",
+  "In:0.7 the:0.6 city:1.2 of:0.6 angels,:2.4 in:0.7 the:0.6 city:1.2 of:0.6 angels:3.0",
+  "Hope:1.1 New:0.9 York:1.2 holds:1.8 you:2.6",
+  "Hope:1.1 it:0.7 holds:1.5 you:1.2 like:1.1 I:1.1 do:3.2",
+  "While:1.0 my:0.8 demons:1.5 stay:1.4 faithful:3.0",
+  "In:0.8 the:0.6 city:1.4 of:0.7 angels:3.6",
 ];
+const SEC_PER_BEAT = 1.2; // 100 BPM half-time (0.60s quarter x 2 for calm visual readability)
 const MORSE = {
   A: '.-', B: '-...', C: '-.-.', D: '-..', E: '.', F: '..-.', G: '--.', H: '....',
   I: '..', J: '.---', K: '-.-', L: '.-..', M: '--', N: '-.', O: '---', P: '.--.',
@@ -412,27 +414,30 @@ const wordMorseUnits = w => {
 };
 const LYRIC_LANES = (() => {
   const LANES = 28;
-  const words = LALA_LYRICS.join(' ').trim().split(/\s+/);
-  const total = words.reduce((a, w) => a + wordMorseUnits(w) + 6, 0);
+  const words = TIMED_LYRICS.join(' ').trim().split(/\s+/).map(tok => {
+    const k = tok.lastIndexOf(':');
+    return { w: tok.slice(0, k), b: +tok.slice(k + 1) };
+  });
+  const total = words.reduce((a, x) => a + wordMorseUnits(x.w) + 7, 0);
   const out = Array.from({ length: LANES }, () => []);
   let idx = 0, acc = 0;
-  for (const w of words) {
-    out[idx].push(w);
-    acc += wordMorseUnits(w) + 6;
+  for (const x of words) {
+    out[idx].push(x);
+    acc += wordMorseUnits(x.w) + 7;
     if (idx < LANES - 1 && acc >= (idx + 1) * (total / LANES) - 18) idx++;
   }
   return out;
 })();
 const CIRCUIT_PAL = {
   dark: {
-    pad: '#2f5a9e', via: '#4b86e0', hole: '#0d1117', wire: '#152744', label: '#6088c4',
+    pad: '#2f5a9e', wire: '#152744', label: '#6088c4',
     fam: [
       { mark: '#2c6bd1', wake: '#4791ff', core: '#99cbff', peak: '#ffffff' }, // night cobalt
       { mark: '#3578e0', wake: '#5ba2ff', core: '#b3daff', peak: '#ffffff' }, // icy azure
     ],
   },
   light: {
-    pad: '#5678ad', via: '#3665b3', hole: '#ffffff', wire: '#c9d9f0', label: '#5574a6',
+    pad: '#5678ad', wire: '#c9d9f0', label: '#5574a6',
     fam: [
       { mark: '#316ed1', wake: '#1f5ed1', core: '#0f3c8f', peak: '#071429' },
       { mark: '#2561c4', wake: '#164eb2', core: '#0b2f73', peak: '#071429' },
@@ -442,8 +447,8 @@ const CIRCUIT_PAL = {
 
 function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
   const bits = [];
-  const wordGaps = [];
-  laneWords.forEach((w, wi) => {
+  const wordEnds = [];
+  laneWords.forEach(({ w }, wi) => {
     let chars = 0;
     for (const ch of w.toUpperCase()) {
       const code = MORSE[ch];
@@ -455,11 +460,9 @@ function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
         else bits.push(1); // 1u dot
       }
     }
-    if (wi < laneWords.length - 1) {
-      const gapStart = bits.length;
-      bits.push(0, 0, 0, 0, 0, 0); // 6u inter-word gap
-      wordGaps.push(gapStart + 3);
-    }
+    const symEndBit = bits.length;
+    if (wi < laneWords.length - 1) bits.push(0, 0, 0, 0, 0, 0, 0); // 7u inter-word gap
+    wordEnds.push({ symEndBit, gapEndBit: bits.length });
   });
 
   const lead = Math.min(14, (x1 - x0) * 0.018);
@@ -469,9 +472,12 @@ function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
   let curY = yLo;
   let len = lead;
 
-  const f = n => +n.toFixed(1);
+  const f = n => +n.toFixed(2);
   const marks = [];
   let runStart = null;
+  const lenAtBit = new Float64Array(totalBits + 1);
+  lenAtBit[0] = lead;
+
   for (let i = 0; i < totalBits; i++) {
     const ny = bits[i] ? yHi : yLo;
     const bx0 = x0 + lead + i * uw;
@@ -489,6 +495,7 @@ function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
     }
     pts.push([bx1, ny]);
     len += uw;
+    lenAtBit[i + 1] = len;
   }
   if (runStart !== null) marks.push(`M${f(runStart)} ${f(yHi)}H${f(x1 - lead)}`);
   if (curY !== yLo) {
@@ -498,20 +505,14 @@ function laneTraceGeom(laneWords, x0, x1, yHi, yLo) {
   pts.push([x1, yLo]);
   len += lead;
 
-  // Approximate path length up to each midpoint word gap (gap is flat LOW so lead + unit*gap + transitions holds up to there)
-  const vias = wordGaps.map(gi => {
-    let gl = lead;
-    let gy = yLo;
-    for (let i = 0; i < gi; i++) {
-      const ny = bits[i] ? yHi : yLo;
-      if (ny !== gy) { gl += Math.abs(ny - gy); gy = ny; }
-      gl += uw;
-    }
-    return { x: x0 + lead + gi * uw, y: yLo, len: gl };
-  });
-
   const d = 'M' + pts.map(([px, py]) => `${f(px)} ${f(py)}`).join('L');
-  return { d, marksPath: marks.join(''), len: +len.toFixed(1), vias };
+  const wordSpans = wordEnds.map((e, wi) => ({
+    b: laneWords[wi].b,
+    w: laneWords[wi].w,
+    sSymEnd: lenAtBit[e.symEndBit],
+    sGapEnd: lenAtBit[e.gapEndBit],
+  }));
+  return { d, marksPath: marks.join(''), len: +len.toFixed(1), lead, wordSpans };
 }
 
 function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated = true, seed = 0, meta = true } = {}) {
@@ -522,27 +523,25 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
   const stepH = 6.5, laneGap = 13.5;
   const sw = narrow ? 1.0 : 1.15;
   const markW = narrow ? 1.95 : 2.2;
-  const viaR = narrow ? 2.0 : 2.25;
   const padR = narrow ? 2.2 : 2.6;
 
   const baseG = [], marksG = [], animG = [], padsG = [], metaG = [];
   if (meta) {
     const yMeta = y + 8;
-    const fz = narrow ? 7.8 : 8.4;
+    const fz = narrow ? 7.6 : 8.4;
     const ch0 = String(laneOffset + 1).padStart(2, '0');
     const ch1 = String(laneOffset + lanes).padStart(2, '0');
-    const leftTxt = `MORSE // NIKI · LA LA LOST YOU · CH ${ch0}-${ch1}`;
-    metaG.push(s.text(leftTxt, x + 1, yMeta, fz, { face: 'mono', fill: pal.label, spacing: narrow ? 0.6 : 1.0 }));
+    const leftTxt = narrow
+      ? `MORSE // LA LA LOST YOU · CH${ch0}-${ch1} · VOCAL`
+      : `MORSE // NIKI · LA LA LOST YOU · CH ${ch0}-${ch1} · VOCAL TEMPO`;
+    metaG.push(s.text(leftTxt, x + 1, yMeta, fz, { face: 'mono', fill: pal.label, spacing: narrow ? 0.5 : 1.0 }));
 
-    // visual legend on right: [1u bar] DOT   [3u bar] DASH   [via O] WORD
-    const dotLbl = 'DOT', dashLbl = 'DASH', wordLbl = 'WORD';
+    // visual legend on right: [1u bar] DOT   [3u bar] DASH
+    const dotLbl = 'DOT', dashLbl = 'DASH';
     const wDotL = s.measure(dotLbl, fz, 'mono', 0.8);
     const wDashL = s.measure(dashLbl, fz, 'mono', 0.8);
-    const wWordL = s.measure(wordLbl, fz, 'mono', 0.8);
-    const barDot = 4, barDash = 11, symGap = 5, itemGap = narrow ? 10 : 13;
-    const xWordTxt = sx1 - wWordL;
-    const xWordSym = xWordTxt - symGap - 2.2;
-    const xDashTxt = xWordSym - 2.2 - itemGap - wDashL;
+    const barDot = 4, barDash = 11, symGap = 5, itemGap = narrow ? 10 : 14;
+    const xDashTxt = sx1 - wDashL;
     const xDashBar = xDashTxt - symGap - barDash;
     const xDotTxt = xDashBar - itemGap - wDotL;
     const xDotBar = xDotTxt - symGap - barDot;
@@ -552,8 +551,6 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
       s.text(dotLbl, xDotTxt, yMeta, fz, { face: 'mono', fill: pal.label, spacing: 0.8 }),
       `<line x1="${xDashBar.toFixed(1)}" y1="${ySym}" x2="${(xDashBar + barDash).toFixed(1)}" y2="${ySym}" stroke="${pal.fam[0].mark}" stroke-width="2.2" stroke-linecap="butt"/>`,
       s.text(dashLbl, xDashTxt, yMeta, fz, { face: 'mono', fill: pal.label, spacing: 0.8 }),
-      `<circle cx="${xWordSym.toFixed(1)}" cy="${ySym}" r="2.1" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.35"/>`,
-      s.text(wordLbl, xWordTxt, yMeta, fz, { face: 'mono', fill: pal.label, spacing: 0.8 }),
     );
   }
 
@@ -564,7 +561,7 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
     const cFam = pal.fam[(lane + seed) % 2];
     const chNum = String(laneOffset + lane + 1).padStart(2, '0');
     const laneWords = LYRIC_LANES[(laneOffset + lane) % LYRIC_LANES.length];
-    const { d, marksPath, len, vias } = laneTraceGeom(laneWords, sx0, sx1, yHi, yLo);
+    const { d, marksPath, len, lead, wordSpans } = laneTraceGeom(laneWords, sx0, sx1, yHi, yLo);
 
     if (meta) {
       metaG.push(s.text(chNum, x + 1, (yHi + yLo) / 2 + 2.6, narrow ? 7.2 : 7.6, { face: 'mono', fill: pal.label, spacing: 0.3 }));
@@ -576,37 +573,60 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
 
     if (animated) {
       const wakeLen = 58, coreLen = 14;
-      const travel = len + wakeLen;
-      const frac = Math.min(0.96, +(len / travel).toFixed(4));
-      const fracOff = Math.min(0.99, +(frac + 0.015).toFixed(4));
+      // Build exact piecewise SMIL milestones matching word-by-word singing speed
+      let timeSec = 0.22; // crisp entry off left terminal pad
+      const milestones = [{ t: 0, s: 0 }, { t: timeSec, s: lead }];
+      wordSpans.forEach((ws, wi) => {
+        const dt = ws.b * SEC_PER_BEAT;
+        if (wi < wordSpans.length - 1) {
+          const hasPause = /[,?)]$/.test(ws.w);
+          const symShare = hasPause ? 0.65 : 0.80;
+          timeSec += dt * symShare;
+          milestones.push({ t: timeSec, s: ws.sSymEnd });
+          timeSec += dt * (1 - symShare);
+          milestones.push({ t: timeSec, s: ws.sGapEnd });
+        } else {
+          timeSec += dt;
+          milestones.push({ t: timeSec, s: ws.sSymEnd });
+        }
+      });
+      timeSec += 0.22; // exit onto right terminal pad
+      const tArriveSec = timeSec;
+      milestones.push({ t: tArriveSec, s: len });
+      const dtWake = Math.max(0.28, (wakeLen / len) * tArriveSec);
+      const dur = +(tArriveSec + dtWake).toFixed(2);
+      milestones.push({ t: dur, s: len + wakeLen });
+
+      const ktArr = milestones.map((m, idx) => idx === milestones.length - 1 ? 1 : +(m.t / dur).toFixed(4));
+      for (let idx = 1; idx < ktArr.length - 1; idx++) {
+        if (ktArr[idx] <= ktArr[idx - 1]) ktArr[idx] = +(ktArr[idx - 1] + 0.0005).toFixed(4);
+      }
+      const keyTimes = ktArr.join(';');
+      const motionPts = milestones.map(m => m.s >= len ? '1' : +(m.s / len).toFixed(4)).join(';');
+      const wakeVals = milestones.map(m => +(wakeLen - m.s).toFixed(1)).join(';');
+      const coreVals = milestones.map(m => +(coreLen - m.s).toFixed(1)).join(';');
+      const frac = ktArr[ktArr.length - 2];
+      const fracOff = Math.min(0.995, +(frac + 0.012).toFixed(4));
+
+      // Stagger cursors across the 4 channels in each divider
+      const begin = (-((lane * (dur / 4) + seed * 0.85) % dur)).toFixed(2);
       const dashGap = Math.ceil(len + 120);
-      const dur = +(7.6 + ((lane * 3 + seed) % 4) * 0.75).toFixed(2);
-      const b1 = -(((lane * 1.45 + seed * 0.9) % dur)).toFixed(2);
-      const b2 = (Number(b1) - dur / 2).toFixed(2);
 
-      for (const begin of [b1, b2]) {
-        animG.push(
-          `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="${markW}" stroke-dasharray="${wakeLen} ${dashGap}" stroke-linecap="square" stroke-linejoin="miter">`
-          + `<animate attributeName="stroke-dashoffset" values="${wakeLen};-${len.toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="${markW + 0.45}" stroke-dasharray="${coreLen} ${dashGap + wakeLen}" stroke-linecap="square" stroke-linejoin="miter">`
-          + `<animate attributeName="stroke-dashoffset" values="${coreLen};-${(len + wakeLen - coreLen).toFixed(1)}" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
-          + `<rect x="-2.4" y="-2.4" width="4.8" height="4.8" rx="0.6" fill="${cFam.peak}">`
-          + `<animateMotion path="${d}" keyPoints="0;1;1" keyTimes="0;${frac};1" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/>`
-          + `<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;${frac};${fracOff};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></rect>`
-        );
-      }
-
-      const hDur = +(dur / 2).toFixed(2);
-      const kHalf = u => +((((u % 0.5) + 0.5) % 0.5) * 2).toFixed(3);
-      const kEnd = Math.max(0.05, Math.min(0.92, kHalf(frac)));
-      padsG.push(
-        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.14;1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`,
-        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${+(kEnd - 0.04).toFixed(3)};${Math.min(0.99, +(kEnd + 0.08).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`
+      animG.push(
+        `<path d="${d}" fill="none" stroke="${cFam.wake}" stroke-width="${markW}" stroke-dasharray="${wakeLen} ${dashGap}" stroke-linecap="square" stroke-linejoin="miter">`
+        + `<animate attributeName="stroke-dashoffset" values="${wakeVals}" keyTimes="${keyTimes}" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
+        + `<path d="${d}" fill="none" stroke="${cFam.core}" stroke-width="${markW + 0.45}" stroke-dasharray="${coreLen} ${dashGap + wakeLen}" stroke-linecap="square" stroke-linejoin="miter">`
+        + `<animate attributeName="stroke-dashoffset" values="${coreVals}" keyTimes="${keyTimes}" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></path>`
+        + `<rect x="-2.4" y="-2.4" width="4.8" height="4.8" rx="0.6" fill="${cFam.peak}">`
+        + `<animateMotion path="${d}" keyPoints="${motionPts}" keyTimes="${keyTimes}" calcMode="linear" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/>`
+        + `<animate attributeName="opacity" values="1;1;0;0" keyTimes="0;${frac};${fracOff};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></rect>`
       );
-      for (const v of vias) {
-        const vt = Math.max(0.05, Math.min(0.90, kHalf((v.len / len) * frac)));
-        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="${viaR}" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"><animate attributeName="stroke" values="${pal.via};${cFam.core};${pal.via};${pal.via}" keyTimes="0;${vt};${Math.min(0.98, +(vt + 0.1).toFixed(3))};1" dur="${hDur}s" begin="${b1}s" repeatCount="indefinite"/></circle>`);
-      }
+
+      const tArr = Math.max(0.06, Math.min(0.94, +(tArriveSec / dur).toFixed(3)));
+      padsG.push(
+        `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;0.10;1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></circle>`,
+        `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"><animate attributeName="fill" values="${pal.pad};${cFam.core};${pal.pad};${pal.pad}" keyTimes="0;${+(tArr - 0.03).toFixed(3)};${Math.min(0.99, +(tArr + 0.06).toFixed(3))};1" dur="${dur}s" begin="${begin}s" repeatCount="indefinite"/></circle>`
+      );
     } else {
       const off = -(len * (0.22 + ((lane + seed) % 4) * 0.16));
       animG.push(
@@ -617,9 +637,6 @@ function circuitTrace(s, { x = 4, y, w, lanes = 4, laneOffset = 0, t, animated =
         `<circle cx="${sx0.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"/>`,
         `<circle cx="${sx1.toFixed(1)}" cy="${yLo.toFixed(1)}" r="${padR}" fill="${pal.pad}"/>`
       );
-      for (const v of vias) {
-        padsG.push(`<circle cx="${v.x.toFixed(1)}" cy="${v.y.toFixed(1)}" r="${viaR}" fill="${pal.hole}" stroke="${pal.via}" stroke-width="1.4"/>`);
-      }
     }
   }
   return `<g>${metaG.join('')}${baseG.join('')}${marksG.join('')}${animG.join('')}${padsG.join('')}</g>`;
@@ -1077,7 +1094,7 @@ function metricsBanner(rawSvg, { animated = true } = {}) {
   const W = 1000, padX = Math.round((W - innerW) / 2), topH = 30, padTop = 28, padBot = 32;
   const H = topH + padTop + innerH + padBot;
   const s = new SVG(W, H, 'GitHub and LeetCode metrics banner',
-    'Live GitHub activity, 3D contribution calendar, languages, LeetCode stats and skills, and featured repositories.');
+    'Live GitHub activity, 3D contribution calendar, languages, LeetCode stats and skills, and repository summary.');
   s.def('<pattern id="mgrid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0V32" fill="none" stroke="#6ba9ff" stroke-opacity=".06"/></pattern>');
   const sh = cardShell(s, W, H, 'mc', 0, animated);
   const o = [sh.open];

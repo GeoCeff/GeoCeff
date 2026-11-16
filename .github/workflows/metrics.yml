@@ -24,7 +24,7 @@ jobs:
           base: header, activity, community, repositories, metadata
           config_display: large
           config_timezone: Asia/Manila
-          config_order: base.header, base.activity+community, isocalendar, languages, leetcode, repositories
+          config_order: base.header, base.activity+community, isocalendar, languages, leetcode, base.repositories
           extras_css: |
             :root {
               --color-calendar-graph-day-L1-bg: #173d72 !important;
@@ -43,8 +43,6 @@ jobs:
           plugin_leetcode: yes
           plugin_leetcode_user: Vinzr
           plugin_leetcode_sections: solved, skills, recent
-          plugin_repositories: yes
-          plugin_repositories_featured: GeoCeff/stock-tester-and-simulator, GeoCeff/perk-the-star, GeoCeff/chatgpt-thread-optimizer, GeoCeff/python-automation-toolkit
 
       - uses: actions/setup-node@v4
         with:
