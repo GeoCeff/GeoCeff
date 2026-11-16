@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
 const { SVG, icon, drawIcon, fadeIn, typing, esc } = require('./svg.cjs');
+const { font } = require('./text.cjs');
 const { NIGHT } = require('./theme.cjs');
 
 const ART = path.join(__dirname, '..', '..', 'art');
@@ -1087,8 +1088,142 @@ function animateIsocalendar(svg) {
   });
 }
 
+function rearrangeMetrics(svg) {
+  // Move isocalendar's Commits streaks / Commits per day column and Repositories up beside Activity / Community stats.
+  let streaksCol = null;
+  let out = svg.replace(
+    /(<section>\s*<h2 class="field">[\s\S]*?Contributions calendar[\s\S]*?<\/h2>\s*)<div class="row">\s*<section>\s*<\/section>\s*(<section>[\s\S]*?Commits streaks[\s\S]*?<\/section>)\s*<\/div>(\s*<svg\b[^>]*?)style="margin-top:\s*-130px;"([^>]*?)viewBox="0,0 480,170"([^>]*>)/i,
+    (_, head, col, svgPre, svgMid, svgPost) => {
+      streaksCol = col.replace(/<(\/?)h3\b/g, '<$1h2');
+      return `${head}${svgPre}style="display:block;margin:-4px 0 0 16px;width:510px;height:auto;"${svgMid}viewBox="4,4 232,154"${svgPost}`;
+    }
+  );
+  if (!streaksCol) return svg;
+
+  let reposCol = null;
+  out = out.replace(
+    /\s*<section class="largeable largeable-inline-flex">\s*<div class="row">\s*<section>\s*(<h2 class="field">(?:(?!<\/h2>)[\s\S])*?\d+\s+Repositories\s*<\/h2>)\s*<div class="row">\s*<section>([\s\S]*?)<\/section>\s*<section>([\s\S]*?)<\/section>\s*<\/div>\s*<\/section>\s*<\/div>\s*<\/section>/i,
+    (_, heading, leftFields, rightFields) => {
+      reposCol = `<section>${heading}${leftFields}${rightFields}</section>`;
+      return '';
+    }
+  );
+
+  const extraCols = reposCol ? `${streaksCol}\n                ${reposCol}` : streaksCol;
+  out = out.replace(
+    /(<section class="largeable largeable-inline-flex)(">)\s*<div class="row">(\s*<section>\s*<h2 class="field">(?:(?!<\/h2>)[\s\S])*?Activity\s*<\/h2>[\s\S]*?Community stats[\s\S]*?<\/section>\s*)<\/div>\s*(<\/section>)/i,
+    (_, open, gt, mid, close) =>
+      `${open}" style="width:100%${gt}<div class="row" style="justify-content:space-between;flex-wrap:nowrap;">${mid}${extraCols}\n                </div>\n            ${close}`.replace(
+        /<section>/g, '<section style="flex:0 0 auto;">'
+      )
+  );
+  // Align the header's contribution squares + "Contributed to N repositories" flush-right above the 4-column grid.
+  out = out.replace(
+    /(<div class="row">\s*<section>[\s\S]*?Followed by[\s\S]*?<\/section>\s*)<section>(\s*<div class="field calendar">[\s\S]*?<\/svg>\s*<\/div>\s*<div class="field">[\s\S]*?Contributed to[\s\S]*?<\/div>\s*)<\/section>(\s*<\/div>)/i,
+    (_, leftSec, rightInner, close) => {
+      const aligned = rightInner
+        .replace('<div class="field calendar">', '<div class="field calendar" style="margin:4px 5px 4px 0;justify-content:flex-end;">')
+        .replace('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 11"', '<svg style="margin:0;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 11"');
+      return `${leftSec}<section style="flex:0 0 auto;margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;">${aligned}</section>${close}`;
+    }
+  );
+
+  // Adjust outer metrics height for the removed bottom Repositories section and tightened calendar crop.
+  const heightDelta = reposCol ? 68 : 10;
+  out = out.replace(/(<svg\b[^>]*\bheight=")(\d+(?:\.\d+)?)(")/i, (_, pre, h, post) => `${pre}${Math.round(+h - heightDelta)}${post}`);
+  return out;
+}
+
+function donutAscii(s, { cx, cy, animated = true } = {}) {
+  const RAMP = '.\`\':*1zxkm8#@';
+  const FILLS = ['#1f5bbf', '#1f5bbf', '#1f5bbf', '#3b82f6', '#3b82f6', '#3b82f6', '#6ba9ff', '#6ba9ff', '#6ba9ff', '#9dccff', '#9dccff', '#f4f9ff', '#f4f9ff'];
+  const cols = 52, rows = 27, fSz = 9.0, cellW = fSz * 0.6, cellH = 9.5;
+  const mono = font('mono'), upm = 200;
+  const gMap = {};
+  for (let idx = 0; idx < RAMP.length; idx++) {
+    const ch = RAMP[idx];
+    const id = `d${idx.toString(16)}`;
+    const d = mono.charToGlyph(ch).getPath(0, 0, upm).toPathData(0);
+    if (d) s.def(`<path id="${id}" d="${d}"/>`);
+    gMap[ch] = d ? id : '';
+  }
+  const sc = +(fSz / upm).toFixed(5);
+  const x0 = +(cx - (cols * cellW) / 2).toFixed(1);
+  const y0 = +(cy - (rows * cellH) / 2).toFixed(1);
+  const xs = Array.from({ length: cols }, (_, c) => Math.round((c * cellW) / sc));
+  const ys = Array.from({ length: rows }, (_, r) => Math.round(((r + 0.8) * cellH) / sc));
+
+  const renderFrame = (A, B) => {
+    const buf = Array(cols * rows).fill(-1);
+    const z = Array(cols * rows).fill(0);
+    const cA = Math.cos(A), sA = Math.sin(A), cB = Math.cos(B), sB = Math.sin(B);
+    for (let j = 0; j < 6.2832; j += 0.038) {
+      const ct = Math.cos(j), st = Math.sin(j);
+      for (let i = 0; i < 6.2832; i += 0.013) {
+        const sp = Math.sin(i), cp = Math.cos(i);
+        const h = ct + 2, D = 1 / (sp * h * sA + st * cA + 5), t = sp * h * cA - st * sA;
+        const x = Math.round(cols / 2 + 29 * D * (cp * h * cB - t * sB));
+        const y = Math.round(rows / 2 + 16.5 * D * (cp * h * sB + t * cB));
+        const o = x + cols * y;
+        const lum = Math.floor(10 * ((st * sA - sp * ct * cA) * cB - sp * ct * sA - st * cA - cp * ct * sB));
+        if (y >= 0 && y < rows && x >= 0 && x < cols && D > z[o]) {
+          z[o] = D;
+          buf[o] = Math.max(0, Math.min(RAMP.length - 1, lum));
+        }
+      }
+    }
+    const buckets = new Map();
+    for (let r = 0; r < rows; r++) {
+      const rowBuckets = new Map();
+      for (let c = 0; c < cols; c++) {
+        const idx = buf[r * cols + c];
+        if (idx < 0) continue;
+        const gid = gMap[RAMP[idx]];
+        if (!gid) continue;
+        const fill = FILLS[idx];
+        if (!rowBuckets.has(fill)) rowBuckets.set(fill, []);
+        rowBuckets.get(fill).push([gid, xs[c]]);
+      }
+      for (const [fill, cells] of rowBuckets) {
+        if (!buckets.has(fill)) buckets.set(fill, []);
+        if (cells.length >= 5) {
+          buckets.get(fill).push(`<g transform="translate(0 ${ys[r]})">${cells.map(([gid, x]) => `<use href="#${gid}" x="${x}"/>`).join('')}</g>`);
+        } else {
+          for (const [gid, x] of cells) buckets.get(fill).push(`<use href="#${gid}" x="${x}" y="${ys[r]}"/>`);
+        }
+      }
+    }
+    return [...buckets].map(([fill, items]) => `<g fill="${fill}">${items.join('')}</g>`).join('');
+  };
+
+  const A0 = 0.55, B0 = 0.7;
+  if (!animated) {
+    return `<g transform="translate(${x0} ${y0}) scale(${sc})">${renderFrame(A0, B0)}</g>`;
+  }
+
+  // 60 fps seamless loop (180 frames over 3.0s)
+  const F = 180, dur = '3s';
+  const frames = [];
+  for (let f = 0; f < F; f++) {
+    const A = A0 + (Math.PI * 2 * f) / F;
+    const B = B0 + (Math.PI * 2 * f) / F;
+    const layers = renderFrame(A, B);
+    let anim;
+    if (f === 0) {
+      anim = `<animate attributeName="visibility" values="visible;hidden" keyTimes="0;${(1 / F).toFixed(4)}" calcMode="discrete" dur="${dur}" repeatCount="indefinite"/>`;
+    } else if (f === F - 1) {
+      anim = `<animate attributeName="visibility" values="hidden;visible" keyTimes="0;${((F - 1) / F).toFixed(4)}" calcMode="discrete" dur="${dur}" repeatCount="indefinite"/>`;
+    } else {
+      anim = `<animate attributeName="visibility" values="hidden;visible;hidden" keyTimes="0;${(f / F).toFixed(4)};${((f + 1) / F).toFixed(4)}" calcMode="discrete" dur="${dur}" repeatCount="indefinite"/>`;
+    }
+    frames.push(`<g visibility="${f === 0 ? 'visible' : 'hidden'}">${layers}${anim}</g>`);
+  }
+  return `<g transform="translate(${x0} ${y0}) scale(${sc})">${frames.join('')}</g>`;
+}
+
 function metricsBanner(rawSvg, { animated = true } = {}) {
-  const openTag = rawSvg.match(/<svg[^>]*>/i)?.[0] || '';
+  const prepared = rearrangeMetrics(animated ? animateIsocalendar(rawSvg) : rawSvg);
+  const openTag = prepared.match(/<svg[^>]*>/i)?.[0] || '';
   const innerW = +(openTag.match(/\bwidth="(\d+(?:\.\d+)?)"/)?.[1] || 960);
   const innerH = +(openTag.match(/\bheight="(\d+(?:\.\d+)?)"/)?.[1] || 1393);
   const W = 1000, padX = Math.round((W - innerW) / 2), topH = 30, padTop = 28, padBot = 32;
@@ -1103,8 +1238,7 @@ function metricsBanner(rawSvg, { animated = true } = {}) {
   o.push(strip(s, { y: 0, w: W, h: topH, prefix: '>', cmd: 'lowlighter/metrics --live', right: mPill, animated, id: 'mty', dur: 8 }));
 
   // strip XML prolog / outer <svg> attrs and position the live metrics SVG cleanly inside the panel
-  const src = animated ? animateIsocalendar(rawSvg) : rawSvg;
-  const body = src
+  const body = prepared
     .replace(/^\uFEFF/, '')
     .replace(/<\?xml[^>]*\?>\s*/i, '')
     .replace(/<svg\b[^>]*>/i, m => {
@@ -1112,6 +1246,7 @@ function metricsBanner(rawSvg, { animated = true } = {}) {
       return `<svg xmlns="http://www.w3.org/2000/svg" x="${padX}" y="${topH + padTop}" width="${innerW}" height="${innerH}" class="${esc(cls)}">`;
     });
   o.push(body);
+  o.push(donutAscii(s, { cx: 765, cy: 538, animated }));
   o.push(brackets(14, topH + 14, W - 28, H - topH - 28, 18, '#6ba9ff', .32, animated));
   o.push(sh.close);
   s.add(...o);
