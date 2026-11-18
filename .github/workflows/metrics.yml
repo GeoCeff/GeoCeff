@@ -45,6 +45,11 @@ jobs:
           plugin_leetcode_sections: solved, skills, recent
 
       - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Sync latest metrics commit
+        run: git pull --ff-only origin main
 
       - uses: actions/setup-node@v4
         with:
