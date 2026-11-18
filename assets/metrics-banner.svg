@@ -248,7 +248,7 @@
                     Contributions calendar
                 </h2>
                 
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:-4px 0 0 16px;width:510px;height:auto;" viewBox="4,4 232,154">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:-4px 0 0 16px;width:520px;height:auto;" viewBox="2,0 240,162">
                     <filter id="brightness1">
                         <feComponentTransfer>
                             <feFuncR type="linear" slope="0.6"/>

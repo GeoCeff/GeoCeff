@@ -1125,7 +1125,7 @@ function rearrangeMetrics(svg) {
     /(<section>\s*<h2 class="field">[\s\S]*?Contributions calendar[\s\S]*?<\/h2>\s*)<div class="row">\s*<section>\s*<\/section>\s*(<section>[\s\S]*?Commits streaks[\s\S]*?<\/section>)\s*<\/div>(\s*<svg\b[^>]*?)style="margin-top:\s*-130px;"([^>]*?)viewBox="0,0 480,170"([^>]*>)/i,
     (_, head, col, svgPre, svgMid, svgPost) => {
       streaksCol = col.replace(/<(\/?)h3\b/g, '<$1h2');
-      return `${head}${svgPre}style="display:block;margin:-4px 0 0 16px;width:510px;height:auto;"${svgMid}viewBox="4,4 232,154"${svgPost}`;
+      return `${head}${svgPre}style="display:block;margin:-4px 0 0 16px;width:520px;height:auto;"${svgMid}viewBox="2,0 240,162"${svgPost}`;
     }
   );
   if (!streaksCol) return svg;
