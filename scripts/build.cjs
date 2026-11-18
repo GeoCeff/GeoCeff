@@ -54,7 +54,7 @@ projects.forEach((p, i) => both(`projects/${p.slug}`, a => A.projectCard(p, { an
 both('stack-banner', a => A.stackBanner(stack, { animated: a }));
 both('stack-banner-narrow', a => A.stackBanner(stack, { animated: a, narrow: true }));
 
-both('metrics-banner', a => A.metricsBanner(rawMetrics, { animated: a }));
+both('metrics-banner', a => A.metricsBanner(rawMetrics, { animated: a, days: stats.github.days }));
 both('metrics-banner-narrow', a => A.metricsBannerNarrow(stats, { animated: a }));
 
 contacts.forEach((c, i) => both(`contact/${c.id}`, a => A.contactCard(c, { animated: a, begin: +(-(i * 1.55)).toFixed(2) })));

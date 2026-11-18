@@ -102,7 +102,7 @@ async function leetcode() {
   }
   const before = JSON.stringify({ ...previous, updated: undefined });
   const after = JSON.stringify({ ...out, updated: undefined });
-  if (before !== after || !previous.updated) out.updated = new Date().toISOString().slice(0, 10);
+  if (before !== after || !previous.updated) out.updated = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' });
   fs.mkdirSync(path.dirname(OUT), { recursive: true });
   fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
 })();

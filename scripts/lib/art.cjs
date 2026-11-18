@@ -1053,6 +1053,36 @@ function languagesCard(gh, { animated = true } = {}) {
 }
 
 // ---------------------------------------------------------------- metrics banner (wraps live lowlighter/metrics SVG)
+function syncIsocalendar(svg, days) {
+  if (!Array.isArray(days) || !days.length) return svg;
+  const lastDow = new Date(`${days[days.length - 1][0]}T00:00:00Z`).getUTCDay();
+  const recent = days.slice(-(26 * 7 + lastDow + 1));
+  const reference = Math.max(1, ...recent.map(([, c]) => c));
+  const colors = ['#ebedf0', '#9be9a8', '#40c463', '#30a14e', '#216e39'];
+  const size = 6;
+  const f = n => +n.toFixed(4);
+  const weeks = [];
+  for (let idx = 0; idx < recent.length; idx += 7) weeks.push(recent.slice(idx, idx + 7));
+  const body = weeks.map((week, i) => {
+    const tiles = week.map(([, count], j) => {
+      const lvl = count === 0 ? 0 : Math.min(4, Math.ceil((count / reference) * 4));
+      const color = colors[lvl];
+      const ratio = count / reference || 0;
+      const h = ratio * size;
+      return `<g transform="translate(${f(j * -1.7)}, ${f(j + (1 - ratio) * size)})">` +
+        `<path fill="${color}" d="M1.7,2 0,1 1.7,0 3.4,1 z"/>` +
+        `<path fill="${color}" filter="url(#brightness1)" d="M0,1 1.7,2 1.7,${f(2 + h)} 0,${f(1 + h)} z"/>` +
+        `<path fill="${color}" filter="url(#brightness2)" d="M1.7,2 3.4,1 3.4,${f(1 + h)} 1.7,${f(2 + h)} z"/>` +
+        `</g>`;
+    }).join('');
+    return `<g transform="translate(${f(i * 1.7)}, ${i})">${tiles}</g>`;
+  }).join('');
+  return svg.replace(
+    /(<svg[^>]*viewBox="0,0 480,170"[^>]*>[\s\S]*?<g transform="scale\(4\) translate\(12, 0\)">)[\s\S]*?(<\/g>\s*<\/svg>)/i,
+    `$1${body}$2`
+  );
+}
+
 function animateIsocalendar(svg) {
   return svg.replace(/(<svg[^>]*viewBox="0,0 480,170"[^>]*>)([\s\S]*?)(<\/svg>)/i, (_, open, inner, close) => {
     let w = -1, d = 0;
@@ -1221,8 +1251,9 @@ function donutAscii(s, { cx, cy, animated = true } = {}) {
   return `<g transform="translate(${x0} ${y0}) scale(${sc})">${frames.join('')}</g>`;
 }
 
-function metricsBanner(rawSvg, { animated = true } = {}) {
-  const prepared = rearrangeMetrics(animated ? animateIsocalendar(rawSvg) : rawSvg);
+function metricsBanner(rawSvg, { animated = true, days = null } = {}) {
+  const synced = syncIsocalendar(rawSvg, days);
+  const prepared = rearrangeMetrics(animated ? animateIsocalendar(synced) : synced);
   const openTag = prepared.match(/<svg[^>]*>/i)?.[0] || '';
   const innerW = +(openTag.match(/\bwidth="(\d+(?:\.\d+)?)"/)?.[1] || 960);
   const innerH = +(openTag.match(/\bheight="(\d+(?:\.\d+)?)"/)?.[1] || 1393);
