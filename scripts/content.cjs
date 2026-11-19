@@ -8,8 +8,8 @@ const profile = {
   role: 'COMPUTER SCIENCE / BUILDER / DATA + GAME SYSTEMS',
   focus: "I build local-first tools, data interfaces, and game systems that turn technical ideas into usable software. I'm a Computer Science student at UP Cebu and a DOST-SEI undergraduate scholar.",
   chips: ['CEBU, PH', 'UP CEBU', 'DOST-SEI SCHOLAR', 'BUILDING'],
-  portfolio: 'https://geoceff.github.io/portfolio-website-public/',
-  portfolioShort: 'geoceff.github.io/portfolio-website-public',
+  portfolio: 'https://geogabaisen.vercel.app/',
+  portfolioShort: 'geogabaisen.vercel.app',
   footer: 'CEBU, PHILIPPINES · PRACTICAL SYSTEMS · SHIPPED WITH RECEIPTS',
 };
 
