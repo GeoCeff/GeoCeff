@@ -1,7 +1,7 @@
 {
  "github": {
-  "total": 501,
-  "week": 23,
+  "total": 527,
+  "week": 49,
   "streak": {
    "current": 1,
    "best": 42
@@ -1481,56 +1481,60 @@
    ],
    [
     "2026-11-19",
-    8
+    34
+   ],
+   [
+    "2026-11-20",
+    0
    ]
   ],
-  "repos": 13,
+  "repos": 12,
   "stars": 6,
   "languages": [
    {
     "name": "JavaScript",
     "color": "#f1e05a",
-    "share": 29.13
+    "share": 30.03
    },
    {
     "name": "TypeScript",
     "color": "#3178c6",
-    "share": 21.7
+    "share": 21.67
    },
    {
     "name": "Python",
     "color": "#3572A5",
-    "share": 18.36
+    "share": 19.15
    },
    {
     "name": "C++",
     "color": "#f34b7d",
-    "share": 14.44
-   },
-   {
-    "name": "CSS",
-    "color": "#663399",
-    "share": 6.11
+    "share": 15.06
    },
    {
     "name": "PowerShell",
     "color": "#012456",
-    "share": 4.11
+    "share": 4.3
    },
    {
     "name": "GDScript",
     "color": "#355570",
-    "share": 3.9
+    "share": 4.07
+   },
+   {
+    "name": "CSS",
+    "color": "#663399",
+    "share": 3.76
    },
    {
     "name": "HTML",
     "color": "#e34c26",
-    "share": 1.88
+    "share": 1.56
    },
    {
     "name": "C#",
     "color": "#7355dd",
-    "share": 0.36
+    "share": 0.37
    },
    {
     "name": "NSIS",
@@ -1570,5 +1574,5 @@
    "date": "2026-10-27"
   }
  },
- "updated": "2026-11-19"
+ "updated": "2026-11-20"
 }
