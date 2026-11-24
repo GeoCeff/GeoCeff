@@ -107,7 +107,7 @@ out.push(`<!--
   Copy lives in scripts/content.cjs; live numbers in data/stats.json (npm run fetch).
   Edit those, not this file or assets/: the daily workflow regenerates both.
 -->`);
-out.push(`<a href="${profile.portfolio}#home"><picture>${src(`${NW} and ${RM}`, 'banner-narrow-still.svg')}${src(NW, 'banner-narrow.svg')}${src(RM, 'banner-still.svg')}<img src="assets/banner.svg${v('banner.svg')}" alt="${esc(`${profile.name}: ${profile.role}. UP Cebu, DOST-SEI scholar. Open the portfolio at ${profile.portfolioShort}.`)}" width="100%"></picture></a>`);
+out.push(`<a href="${profile.portfolio}?stage=room"><picture>${src(`${NW} and ${RM}`, 'banner-narrow-still.svg')}${src(NW, 'banner-narrow.svg')}${src(RM, 'banner-still.svg')}<img src="assets/banner.svg${v('banner.svg')}" alt="${esc(`${profile.name}: ${profile.role}. UP Cebu, DOST-SEI scholar. Enter the 3D Room 404 at ${profile.portfolioShort}.`)}" width="100%"></picture></a>`);
 out.push(`<p><a href="${profile.portfolio}#about">${themed('intro', `${profile.focus} Status: ${profile.chips.join(', ')}.`, 'width="100%"', { still: true, narrow: true })}</a></p>`);
 
 out.push(h3('metrics', sections.metrics, `${gh}?tab=overview`));
