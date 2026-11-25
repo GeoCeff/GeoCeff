@@ -1,6 +1,6 @@
 {
  "github": {
-  "total": 578,
+  "total": 574,
   "week": 85,
   "streak": {
    "current": 6,
@@ -1289,11 +1289,11 @@
    ],
    [
     "2026-10-09",
-    2
+    0
    ],
    [
     "2026-10-10",
-    2
+    1
    ],
    [
     "2026-10-11",
@@ -1357,7 +1357,7 @@
    ],
    [
     "2026-10-26",
-    5
+    4
    ],
    [
     "2026-10-27",
@@ -1486,32 +1486,32 @@
    {
     "name": "JavaScript",
     "color": "#f1e05a",
-    "share": 30.03
+    "share": 30.04
    },
    {
     "name": "TypeScript",
     "color": "#3178c6",
-    "share": 21.67
+    "share": 21.74
    },
    {
     "name": "Python",
     "color": "#3572A5",
-    "share": 19.15
+    "share": 19.11
    },
    {
     "name": "C++",
     "color": "#f34b7d",
-    "share": 15.06
+    "share": 15.03
    },
    {
     "name": "PowerShell",
     "color": "#012456",
-    "share": 4.3
+    "share": 4.29
    },
    {
     "name": "GDScript",
     "color": "#355570",
-    "share": 4.07
+    "share": 4.06
    },
    {
     "name": "CSS",
